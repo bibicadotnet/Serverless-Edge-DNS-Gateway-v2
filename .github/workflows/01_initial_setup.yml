@@ -1,0 +1,343 @@
+name: 01 - Initial Setup & Full Deployment
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Load config
+        id: config
+        run: |
+          CONFIG=".github/cloudflare-config.json"
+          echo "project_name=$(jq -r '.project_name' $CONFIG)" >> $GITHUB_OUTPUT
+          echo "custom_domain=$(jq -r '.custom_domain' $CONFIG)" >> $GITHUB_OUTPUT
+          jq -r '.accounts[]' $CONFIG > /tmp/accounts.txt
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Cache npm
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: npm-wrangler-${{ runner.os }}
+
+      - name: Install Wrangler
+        run: npm install -g wrangler --prefer-offline
+
+      - name: Deploy to all accounts
+        env:
+          PROJECT_NAME: ${{ steps.config.outputs.project_name }}
+          CUSTOM_DOMAIN: ${{ steps.config.outputs.custom_domain }}
+        run: |
+          rm -f /tmp/pages_urls_*.txt
+          INDEX=1
+          while IFS=' ' read -r ACCOUNT_ID TOKEN; do
+            [ -z "$ACCOUNT_ID" ] && continue
+
+            FMT_IDX=$(printf "%02d" $INDEX)
+
+            (
+              set +e
+              WORK_DIR=$(mktemp -d)
+              cp -r "$GITHUB_WORKSPACE/." "$WORK_DIR/"
+              cd "$WORK_DIR" || exit
+              export CLOUDFLARE_API_TOKEN="$TOKEN"
+              export CLOUDFLARE_ACCOUNT_ID="$ACCOUNT_ID"
+
+              # Create project if it doesn't exist
+              EXISTS=$(wrangler pages project list 2>/dev/null | grep -c "$PROJECT_NAME" || true)
+              if [ "$EXISTS" -eq 0 ]; then
+                wrangler pages project create "$PROJECT_NAME" --production-branch=main >/dev/null 2>&1
+              fi
+
+              # Deploy
+              DEPLOY_OUTPUT=$(wrangler pages deploy . \
+                --project-name="$PROJECT_NAME" \
+                --branch=main \
+                --commit-dirty=true 2>&1)
+              PAGE_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP '[\w-]+\.pages\.dev' | tail -1)
+              echo "$PAGE_URL" > "/tmp/pages_urls_${FMT_IDX}.txt"
+
+              # Attach custom domain if not already set
+              DOMAIN_EXISTS=$(curl -s \
+                -X GET "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${PROJECT_NAME}/domains" \
+                -H "Authorization: Bearer ${TOKEN}" \
+                | grep -o "$CUSTOM_DOMAIN" | head -1)
+              if [ -z "$DOMAIN_EXISTS" ]; then
+                curl -s \
+                  -X POST "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${PROJECT_NAME}/domains" \
+                  -H "Authorization: Bearer ${TOKEN}" \
+                  -H "Content-Type: application/json" \
+                  --data "{\"name\":\"${CUSTOM_DOMAIN}\"}" > /dev/null
+              fi
+
+              # Delete old deployments in parallel
+              DEPLOY_LIST=$(curl -s \
+                -X GET "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${PROJECT_NAME}/deployments" \
+                -H "Authorization: Bearer ${TOKEN}")
+              OLD_IDS=$(echo "$DEPLOY_LIST" | jq -r '(.result // []) | .[1:]? | .[]?.id // empty')
+              if [ -n "$OLD_IDS" ]; then
+                echo "$OLD_IDS" | xargs -P 10 -I {} curl -s \
+                  -X DELETE "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${PROJECT_NAME}/deployments/{}?force=true" \
+                  -H "Authorization: Bearer ${TOKEN}" > /dev/null
+              fi
+
+              rm -rf "$WORK_DIR"
+            ) &
+
+            INDEX=$((INDEX + 1))
+          done < /tmp/accounts.txt
+          wait
+          cat /tmp/pages_urls_*.txt > /tmp/pages_urls.txt
+
+      - name: Print deployment URLs
+        run: cat /tmp/pages_urls.txt
+
+      - name: Setup Bulk Redirects (disable pages.dev)
+        env:
+          PROJECT_NAME: ${{ steps.config.outputs.project_name }}
+          CUSTOM_DOMAIN: ${{ steps.config.outputs.custom_domain }}
+        run: |
+          # "redirect_" = 9 chars, project part max 41 chars = total 50
+          LIST_NAME="disable_pages_dev"
+
+          # Helper: call CF API and print response body + HTTP status code
+          cf_api() {
+            local METHOD="$1"
+            local URL="$2"
+            local TOKEN="$3"
+            local DATA="$4"
+
+            if [ -n "$DATA" ]; then
+              curl -s -w "\n__HTTP_STATUS:%{http_code}" \
+                -X "$METHOD" "$URL" \
+                -H "Authorization: Bearer ${TOKEN}" \
+                -H "Content-Type: application/json" \
+                --data "$DATA"
+            else
+              curl -s -w "\n__HTTP_STATUS:%{http_code}" \
+                -X "$METHOD" "$URL" \
+                -H "Authorization: Bearer ${TOKEN}"
+            fi
+          }
+
+          # Parse HTTP status from cf_api response
+          get_status() { echo "$1" | grep -oP '__HTTP_STATUS:\K\d+'; }
+          get_body()   { echo "$1" | sed 's/__HTTP_STATUS:[0-9]*//'; }
+
+          INDEX=1
+          while IFS=' ' read -r ACCOUNT_ID TOKEN; do
+            [ -z "$ACCOUNT_ID" ] && continue
+            FMT_IDX=$(printf "%02d" $INDEX)
+
+            PAGE_URL=$(cat "/tmp/pages_urls_${FMT_IDX}.txt" 2>/dev/null | tr -d '[:space:]')
+            if [ -z "$PAGE_URL" ]; then
+              echo "WARN: PAGE_URL not found for index $FMT_IDX, skipping."
+              INDEX=$((INDEX + 1))
+              continue
+            fi
+
+            echo "=============================================="
+            echo "Account: $ACCOUNT_ID"
+            echo "  pages.dev: $PAGE_URL -> https://www.google.com"
+            echo "=============================================="
+
+            # 1. Find or create Redirect List
+            echo ""
+            echo "[1/3] Checking Redirect List: $LIST_NAME"
+            RESP=$(cf_api GET \
+              "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rules/lists" \
+              "$TOKEN")
+            HTTP_CODE=$(get_status "$RESP")
+            BODY=$(get_body "$RESP")
+            echo "  GET lists → HTTP $HTTP_CODE"
+
+            if [ "$HTTP_CODE" != "200" ]; then
+              echo "  ERROR: Failed to fetch lists:"
+              echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+              echo "  Check token permissions: Account > Account Filter Lists > Edit"
+              INDEX=$((INDEX + 1))
+              continue
+            fi
+
+            LIST_ID=$(get_body "$RESP" | jq -r ".result[]? | select(.name == \"${LIST_NAME}\") | .id" | head -1)
+
+            if [ -z "$LIST_ID" ]; then
+              echo "  List not found, creating..."
+              RESP=$(cf_api POST \
+                "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rules/lists" \
+                "$TOKEN" \
+                "{\"name\":\"${LIST_NAME}\",\"kind\":\"redirect\",\"description\":\"Disable pages.dev for ${PROJECT_NAME}\"}")
+              HTTP_CODE=$(get_status "$RESP")
+              BODY=$(get_body "$RESP")
+              echo "  POST create list → HTTP $HTTP_CODE"
+
+              if [ "$HTTP_CODE" != "200" ]; then
+                echo "  ERROR: Failed to create list:"
+                echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+                INDEX=$((INDEX + 1))
+                continue
+              fi
+              LIST_ID=$(echo "$BODY" | jq -r '.result.id')
+              echo "  List created - ID: $LIST_ID"
+            else
+              echo "  Using existing list - ID: $LIST_ID"
+            fi
+
+            # 2. PUT items into list
+            echo ""
+            echo "[2/3] PUT redirect item into list..."
+            ITEM_PAYLOAD=$(jq -n \
+              --arg src "${PAGE_URL}/" \
+              '[{
+                redirect: {
+                  source_url: $src,
+                  target_url: "https://www.google.com",
+                  status_code: 301,
+                  include_subdomains: false,
+                  subpath_matching: true,
+                  preserve_path_suffix: false
+                }
+              }]')
+
+            RESP=$(cf_api PUT \
+              "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rules/lists/${LIST_ID}/items" \
+              "$TOKEN" \
+              "$ITEM_PAYLOAD")
+            HTTP_CODE=$(get_status "$RESP")
+            BODY=$(get_body "$RESP")
+            echo "  PUT items → HTTP $HTTP_CODE"
+
+            if [ "$HTTP_CODE" != "200" ]; then
+              echo "  ERROR: Failed to PUT items:"
+              echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+              INDEX=$((INDEX + 1))
+              continue
+            fi
+
+            OP_ID=$(echo "$BODY" | jq -r '.result.operation_id')
+            echo "  operation_id: $OP_ID"
+
+            # Poll until completed (max 20 seconds)
+            for i in $(seq 1 10); do
+              sleep 2
+              RESP=$(cf_api GET \
+                "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rules/lists/bulk_operations/${OP_ID}" \
+                "$TOKEN")
+              HTTP_CODE=$(get_status "$RESP")
+              BODY=$(get_body "$RESP")
+              OP_STATUS=$(echo "$BODY" | jq -r '.result.status')
+              echo "  poll $i → HTTP $HTTP_CODE  status=$OP_STATUS"
+              [ "$OP_STATUS" = "completed" ] && break
+              if [ "$OP_STATUS" = "failed" ]; then
+                echo "  ERROR: Operation failed:"
+                echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+                break
+              fi
+            done
+
+            # 3. Create or update Ruleset
+            echo ""
+            echo "[3/3] Configuring Ruleset http_request_redirect..."
+            RESP=$(cf_api GET \
+              "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rulesets" \
+              "$TOKEN")
+            HTTP_CODE=$(get_status "$RESP")
+            BODY=$(get_body "$RESP")
+            echo "  GET rulesets → HTTP $HTTP_CODE"
+
+            if [ "$HTTP_CODE" != "200" ]; then
+              echo "  ERROR: Failed to fetch rulesets:"
+              echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+              echo "  Check token permissions: Account > Bulk URL Redirects > Edit"
+              INDEX=$((INDEX + 1))
+              continue
+            fi
+
+            RULESET_ID=$(echo "$BODY" \
+              | jq -r '.result[]? | select(.phase == "http_request_redirect" and .kind == "root") | .id' \
+              | head -1)
+
+            RULE_REF="redirect_${LIST_NAME}"
+            NEW_RULE=$(jq -n \
+              --arg ref       "$RULE_REF" \
+              --arg list_name "$LIST_NAME" \
+              --arg desc      "Disable pages.dev" \
+              '{
+                ref:        $ref,
+                expression: ("http.request.full_uri in $" + $list_name),
+                description: $desc,
+                action:     "redirect",
+                action_parameters: {
+                  from_list: { name: $list_name, key: "http.request.full_uri" }
+                }
+              }')
+
+            if [ -z "$RULESET_ID" ]; then
+              echo "  Ruleset not found, creating..."
+              RS_PAYLOAD=$(jq -n \
+                --argjson rule "$NEW_RULE" \
+                '{name:"Redirect ruleset",kind:"root",phase:"http_request_redirect",rules:[$rule]}')
+              RESP=$(cf_api POST \
+                "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rulesets" \
+                "$TOKEN" \
+                "$RS_PAYLOAD")
+              HTTP_CODE=$(get_status "$RESP")
+              BODY=$(get_body "$RESP")
+              echo "  POST ruleset → HTTP $HTTP_CODE"
+              if [ "$HTTP_CODE" != "200" ]; then
+                echo "  ERROR: Failed to create ruleset:"
+                echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+                INDEX=$((INDEX + 1))
+                continue
+              fi
+              echo "  Ruleset created successfully."
+            else
+              echo "  Found Ruleset $RULESET_ID, upserting rule (ref=$RULE_REF)..."
+              RESP=$(cf_api GET \
+                "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rulesets/${RULESET_ID}" \
+                "$TOKEN")
+              BODY=$(get_body "$RESP")
+              CURRENT_RULES=$(echo "$BODY" | jq '.result.rules // []')
+
+              RULE_EXISTS=$(echo "$CURRENT_RULES" \
+                | jq -r ".[]? | select(.ref == \"${RULE_REF}\") | .ref")
+
+              if [ -z "$RULE_EXISTS" ]; then
+                MERGED_RULES=$(echo "$CURRENT_RULES" | jq --argjson r "$NEW_RULE" '. + [$r]')
+              else
+                MERGED_RULES=$(echo "$CURRENT_RULES" | jq \
+                  --argjson r   "$NEW_RULE" \
+                  --arg     ref "$RULE_REF" \
+                  '[.[] | if .ref == $ref then $r else . end]')
+              fi
+
+              RS_PAYLOAD=$(jq -n \
+                --argjson rules "$MERGED_RULES" \
+                '{name:"Redirect ruleset",kind:"root",phase:"http_request_redirect",rules:$rules}')
+              RESP=$(cf_api PUT \
+                "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/rulesets/${RULESET_ID}" \
+                "$TOKEN" \
+                "$RS_PAYLOAD")
+              HTTP_CODE=$(get_status "$RESP")
+              BODY=$(get_body "$RESP")
+              echo "  PUT ruleset → HTTP $HTTP_CODE"
+              if [ "$HTTP_CODE" != "200" ]; then
+                echo "  ERROR: Failed to update ruleset:"
+                echo "$BODY" | jq '.' 2>/dev/null || echo "$BODY"
+                INDEX=$((INDEX + 1))
+                continue
+              fi
+              echo "  Ruleset updated successfully."
+            fi
+
+            echo ""
+            echo "Account $ACCOUNT_ID - done."
+            INDEX=$((INDEX + 1))
+          done < /tmp/accounts.txt
