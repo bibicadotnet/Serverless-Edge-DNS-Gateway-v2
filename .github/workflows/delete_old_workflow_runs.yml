@@ -1,0 +1,57 @@
+name: Delete Old Workflow Runs
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 20 * * *'
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Load config
+        id: config
+        run: |
+          CONFIG=".github/cloudflare-config.json"
+          echo "project_name=$(jq -r '.project_name' $CONFIG)" >> $GITHUB_OUTPUT
+          jq -r '.accounts[]' $CONFIG > /tmp/accounts.txt
+
+      - name: Delete Old GitHub Workflow Runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 1
+          keep_minimum_runs: 0
+
+      - name: Delete Old Cloudflare Deployments
+        env:
+          PROJECT_NAME: ${{ steps.config.outputs.project_name }}
+        run: |
+          while IFS=' ' read -r ACCOUNT_ID TOKEN; do
+            [ -z "$ACCOUNT_ID" ] && continue
+            
+            echo "Cleaning up deployments for Account: $ACCOUNT_ID"
+            
+            # 1. Fetch deployment list
+            DEPLOY_LIST=$(curl -s \
+              -X GET "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${PROJECT_NAME}/deployments" \
+              -H "Authorization: Bearer ${TOKEN}")
+            
+            # 2. Extract IDs excluding the most recent (index 0)
+            OLD_IDS=$(echo "$DEPLOY_LIST" | jq -r '(.result // []) | .[1:]? | .[]?.id // empty')
+            
+            # 3. Delete in parallel
+            if [ -n "$OLD_IDS" ]; then
+              COUNT=$(echo "$OLD_IDS" | wc -l)
+              echo "  Found $COUNT old deployments. Deleting..."
+              echo "$OLD_IDS" | xargs -P 10 -I {} curl -s \
+                -X DELETE "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${PROJECT_NAME}/deployments/{}?force=true" \
+                -H "Authorization: Bearer ${TOKEN}" > /dev/null
+              echo "  ✅ Cleanup finished for this account."
+            else
+              echo "  ✅ No old deployments found."
+            fi
+          done < /tmp/accounts.txt

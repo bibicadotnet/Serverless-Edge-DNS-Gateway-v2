@@ -1,0 +1,49 @@
+name: 03 - Update DNS Blocklists
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Run every hour
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  update-lists:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Run update script
+        run: |
+          chmod +x update_lists.sh
+          ./update_lists.sh
+
+      - name: Commit and Push changes
+        id: git-commit
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          git add rules/*.txt database/stats.json
+          
+          if git diff --staged --quiet; then
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "Auto-update: blocklists and allowlists"
+            git push
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Trigger Deploy Workflow
+        if: steps.git-commit.outputs.changes_detected == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Triggering Deploy Workflow..."
+          gh workflow run "02 - Deploy Cloudflare Pages Only" --ref ${{ github.ref_name }}

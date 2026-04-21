@@ -1,0 +1,72 @@
+name: 02 - Deploy Cloudflare Pages Only
+on:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        description: 'The branch or SHA to checkout and deploy'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref_name }}
+
+      - name: Load config
+        id: config
+        run: |
+          CONFIG=".github/cloudflare-config.json"
+          echo "project_name=$(jq -r '.project_name' $CONFIG)" >> $GITHUB_OUTPUT
+          # Convert JSON array to newline-separated text for the loop
+          jq -r '.accounts[]' $CONFIG > /tmp/accounts.txt
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Cache npm
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: npm-wrangler-${{ runner.os }}
+
+      - name: Install Wrangler
+        run: npm install -g wrangler --prefer-offline
+
+      - name: Deploy to all accounts
+        env:
+          PROJECT_NAME: ${{ steps.config.outputs.project_name }}
+        run: |
+          INDEX=1
+          while IFS=' ' read -r ACCOUNT_ID TOKEN; do
+            [ -z "$ACCOUNT_ID" ] && continue
+
+            FMT_IDX=$(printf "%02d" $INDEX)
+
+            (
+              set +e
+              export CLOUDFLARE_API_TOKEN="$TOKEN"
+              export CLOUDFLARE_ACCOUNT_ID="$ACCOUNT_ID"
+
+              echo "[$FMT_IDX] Deploying to Cloudflare Account $ACCOUNT_ID..."
+              
+              DEPLOY_OUTPUT=$(wrangler pages deploy . \
+                --project-name="$PROJECT_NAME" \
+                --branch=main \
+                --commit-dirty=true 2>&1)
+              
+              PAGE_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP '[\w-]+\.pages\.dev' | tail -1)
+              echo "[$FMT_IDX] Deployed: $PAGE_URL"
+            ) &
+
+            INDEX=$((INDEX + 1))
+          done < /tmp/accounts.txt
+          wait
+          echo "All deployments finished!"
