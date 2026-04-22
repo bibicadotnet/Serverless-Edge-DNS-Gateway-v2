@@ -16,7 +16,7 @@ jobs:
         run: |
           CONFIG=".github/cloudflare-config.json"
           echo "project_name=$(jq -r '.project_name' $CONFIG)" >> $GITHUB_OUTPUT
-          jq -r '.accounts[]' $CONFIG > /tmp/accounts.txt
+          cat .github/cloudflare-accounts.txt > /tmp/accounts.txt
 
       - name: Delete Old GitHub Workflow Runs
         uses: Mattraks/delete-workflow-runs@v2

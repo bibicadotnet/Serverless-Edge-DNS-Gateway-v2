@@ -9,8 +9,9 @@
 #   3. Patches update_lists.sh with the latest subscription URLs
 #   4. Runs update_lists.sh to fetch & merge all external lists
 #   5. Writes the final all_configs_snapshot.json for reconciliation
-#   6. Commits & pushes everything in one atomic commit
-#   7. Triggers 02_deploy-only.yml for immediate multi-account deployment
+#   6. Deletes pending_sync.json (consumed — inbox pattern)
+#   7. Commits & pushes everything in one atomic commit
+#   8. Triggers 02_deploy-only.yml for immediate multi-account deployment
 #
 # Cloudflare Pages auto-deploys on every push to main, so no separate
 # deploy step is needed. The UI polls this workflow's status to know when done.
@@ -171,7 +172,10 @@ jobs:
             _updated:     Date.now()
           };
           fs.writeFileSync('database/all_configs_snapshot.json', JSON.stringify(snapshot, null, 2));
+          // Clean up: delete the consumed payload so it acts as a true inbox
+          fs.unlinkSync('database/pending_sync.json');
           console.log('✅ Snapshot written — _updated:', new Date(snapshot._updated).toISOString());
+          console.log('🗑️ pending_sync.json deleted (consumed)');
           SCRIPT
 
       # ── 5. Commit & push everything ────────────────────────────────────────
@@ -185,7 +189,6 @@ jobs:
           else
             git commit -m "sync: $(date -u '+%Y-%m-%d %H:%M UTC') — admin config + lists refresh"
             git push
-            echo "✅ Changes committed and pushed. Cloudflare Pages deployment will begin automatically."
           fi
 
       - name: Trigger Deploy Workflow

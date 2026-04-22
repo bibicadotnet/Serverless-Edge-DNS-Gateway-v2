@@ -14,7 +14,7 @@ jobs:
           CONFIG=".github/cloudflare-config.json"
           echo "project_name=$(jq -r '.project_name' $CONFIG)" >> $GITHUB_OUTPUT
           echo "custom_domain=$(jq -r '.custom_domain' $CONFIG)" >> $GITHUB_OUTPUT
-          jq -r '.accounts[]' $CONFIG > /tmp/accounts.txt
+          cat .github/cloudflare-accounts.txt > /tmp/accounts.txt
 
       - name: Setup Node.js
         uses: actions/setup-node@v6

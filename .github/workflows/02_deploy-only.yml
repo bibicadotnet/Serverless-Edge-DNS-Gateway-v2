@@ -24,12 +24,12 @@ jobs:
           CONFIG=".github/cloudflare-config.json"
           echo "project_name=$(jq -r '.project_name' $CONFIG)" >> $GITHUB_OUTPUT
           # Convert JSON array to newline-separated text for the loop
-          jq -r '.accounts[]' $CONFIG > /tmp/accounts.txt
+          cat .github/cloudflare-accounts.txt > /tmp/accounts.txt
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: '24'
 
       - name: Cache npm
         uses: actions/cache@v5
