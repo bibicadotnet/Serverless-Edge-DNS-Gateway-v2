@@ -703,12 +703,6 @@
             border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(207, 34, 46, 0.4); background: var(--err); }
-            70% { box-shadow: 0 0 0 10px rgba(207, 34, 46, 0); background: #e02431; }
-            100% { box-shadow: 0 0 0 0 rgba(207, 34, 46, 0); background: var(--err); }
-        }
-        .pulse-red { animation: pulse-red 1.5s infinite; background: var(--err) !important; color: #fff !important; }
         .sync-status-bar {
             padding: 10px 20px; font-size: 14px; font-weight: 500;
             display: flex; align-items: center; justify-content: center;
@@ -782,142 +776,6 @@
             text-align: center;
         }
 
-        /* ===== REVIEW MODAL ===== */
-        .review-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(4px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-            animation: fadeIn 0.15s ease-out;
-        }
-
-        .review-modal {
-            background: var(--bg-1);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            width: 100%;
-            max-width: 520px;
-            max-height: 85vh;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .review-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            font-size: 17px;
-            font-weight: 600;
-        }
-
-        .review-header-sub {
-            font-size: 12px;
-            color: var(--text-2);
-            font-weight: 400;
-            margin-top: 4px;
-        }
-
-        .review-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px 0;
-        }
-
-        .review-empty {
-            padding: 40px;
-            text-align: center;
-            color: var(--text-3);
-            font-size: 14px;
-        }
-
-        .review-category {
-            padding: 12px 24px 6px;
-            font-size: 10px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: var(--text-3);
-        }
-
-        .review-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 10px 24px;
-            cursor: pointer;
-            transition: background 0.1s;
-            user-select: none;
-        }
-
-        .review-item:hover {
-            background: var(--bg-2);
-        }
-
-        .review-item.excluded {
-            opacity: 0.45;
-            filter: grayscale(1);
-        }
-
-        .review-item-check {
-            width: 18px;
-            height: 18px;
-            border: 1.5px solid var(--border);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            color: transparent;
-            margin-top: 2px;
-            transition: all 0.1s;
-        }
-
-        .review-item-check.checked {
-            background: var(--accent);
-            border-color: var(--accent);
-            color: #fff;
-        }
-
-        .review-item-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .review-item-label {
-            font-size: 13.5px;
-            font-weight: 500;
-            color: var(--text-1);
-        }
-
-        .review-item-detail {
-            font-size: 12px;
-            color: var(--text-2);
-            font-family: 'SF Mono', 'Cascadia Code', monospace;
-            margin-top: 2px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .review-footer {
-            padding: 16px 24px;
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            background: var(--bg-2);
-            border-bottom-left-radius: 12px;
-            border-bottom-right-radius: 12px;
-        }
 
         /* ===== NOTIFICATION LOGS ===== */
         .log-dropdown {
@@ -1991,8 +1849,9 @@
                                                 redirect/rewrite (CNAME overrides) — helps overcome network blocks by
                                                 rewriting target domains.</div>
                                         </div>
-                                        <span class="badge badge-d">{{ (lists[listTab]||[]).length }} active
-                                            entries</span>
+                                        <span class="badge" :class="listTab==='blocklist' || listTab==='allowlist' ? 'badge-i' : 'badge-d'">
+                                            {{ (lists[listTab]||[]).length }} active entries
+                                        </span>
                                     </div>
                                     <div class="card-body">
                                         <div
@@ -2005,96 +1864,51 @@
                                         <div class="input-row" style="margin-bottom:16px;">
                                             <textarea class="fi fi-mono" v-model="currentRawText"
                                                 :placeholder="textPlaceholders[listTab]"
-                                                rows="12"
-                                                style="resize: vertical; white-space: pre; overflow-x: auto; box-sizing: border-box; width: 100%; font-size: 13px; line-height: 1.6; padding: 12px;"></textarea>
+                                                v-resizer="listTab + '_text'"
+                                                :key="listTab + '_text'"
+                                                style="resize: vertical; white-space: pre; overflow-x: auto; box-sizing: border-box; width: 100%; font-size: 13px; line-height: 1.6; padding: 12px; min-height: 100px;"></textarea>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div v-if="listTab==='redirect_rules'">
-                                    <!-- Static source -->
-                                    <div class="card">
-                                        <div class="card-head">
-                                            <div class="card-title">Static File Source</div>
+                                <!-- External URL Subscriptions (blocklist/allowlist only) -->
+                                <div v-if="listTab==='blocklist' || listTab==='allowlist'" class="card">
+                                    <div class="card-head">
+                                        <div>
+                                            <div class="card-title">External {{ listTabLabels[listTab] }} URLs</div>
+                                            <div class="card-desc">Subscribe to remote blocklists — AdBlock, hosts
+                                                file, and
+                                                plain domain formats are supported. Comments starting with # are
+                                                ignored.</div>
                                         </div>
-                                        <div class="card-body">
-                                            <div class="source-info">
-                                                <span class="source-path">{{ config.REDIRECT_RULES_URL }}</span>
-                                                <span class="badge badge-i">{{ fmt((stats.redirectRulesSize || 0) + ((lists.redirect_rules||[]).length)) }} total
-                                                    (merged)</span>
-                                            </div>
-                                            <div class="fh" style="margin-top:10px">Static file + custom rules above are
-                                                merged
-                                                at runtime.</div>
+                                        <span class="badge badge-i">
+                                            {{ (customUrls[listTab]||[]).length }} subscriptions 
+                                            ({{ fmt(staticSubscriptionRules[listTab]) }} rules)
+                                        </span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div
+                                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
+                                            <div class="section-label" style="margin-bottom:0;">Raw Text Editor
+                                                (URLs)</div>
+                                            <button class="btn btn-save" @click="saveUrlText">
+                                                Update URLs Locally
+                                            </button>
+                                        </div>
+                                        <div class="input-row" style="margin-bottom:16px;">
+                                            <textarea class="fi fi-mono" v-model="currentRawUrlText"
+                                                :placeholder="urlPlaceholders[listTab]"
+                                                v-resizer="listTab + '_url'"
+                                                :key="listTab + '_url'"
+                                                style="resize: vertical; white-space: pre; overflow-x: auto; box-sizing: border-box; width: 100%; font-size: 13px; line-height: 1.6; padding: 12px; min-height: 80px;"></textarea>
+                                        </div>
+                                        <div class="fh" style="margin-top:10px; text-align: center;">Domains are
+                                            auto-cleaned
+                                            (AdBlock/hosts/plain formats). Fetched and merged on next list refresh.
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- External URL Subscriptions & Static Info (blocklist, allowlist, etc) -->
-                                <div v-else>
-
-                                    <!-- External URL Subscriptions (blocklist/allowlist only) -->
-                                    <div v-if="listTab==='blocklist' || listTab==='allowlist'" class="card">
-                                        <div class="card-head">
-                                            <div>
-                                                <div class="card-title">External {{ listTabLabels[listTab] }} URLs</div>
-                                                <div class="card-desc">Subscribe to remote blocklists — AdBlock, hosts
-                                                    file, and
-                                                    plain domain formats are supported. Comments starting with # are
-                                                    ignored.</div>
-                                            </div>
-                                            <span class="badge badge-i">{{ (customUrls[listTab]||[]).length }}
-                                                subscriptions</span>
-                                        </div>
-                                        <div class="card-body">
-                                            <div
-                                                style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                                                <div class="section-label" style="margin-bottom:0;">Raw Text Editor
-                                                    (URLs)</div>
-                                                <button class="btn btn-save" @click="saveUrlText">
-                                                    Update URLs Locally
-                                                </button>
-                                            </div>
-                                            <div class="input-row" style="margin-bottom:16px;">
-                                                <textarea class="fi fi-mono" v-model="currentRawUrlText"
-                                                    :placeholder="urlPlaceholders[listTab]"
-                                                    rows="5"
-                                                    style="resize: vertical; white-space: pre; overflow-x: auto; box-sizing: border-box; width: 100%; font-size: 13px; line-height: 1.6; padding: 12px;"></textarea>
-                                            </div>
-                                            <div class="fh" style="margin-top:10px; text-align: center;">Domains are
-                                                auto-cleaned
-                                                (AdBlock/hosts/plain formats). Fetched and merged on next list refresh.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Static source info -->
-                                    <div class="card">
-                                        <div class="card-head">
-                                            <div class="card-title">Static File Source</div>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="source-info">
-                                                <span class="source-path">{{ listTab==='blocklist' ?
-                                                    config.BLOCKLIST_URL :
-                                                    listTab==='allowlist' ? config.ALLOWLIST_URL :
-                                                    listTab==='private_tlds' ?
-                                                    config.PRIVATE_TLD_URL : config.MULLVAD_UPSTREAM_URL }}</span>
-                                                <span class="badge badge-i">
-                                                    {{ listTab==='blocklist' ? fmt(stats.blocklistSize || ((lists.blocklist||[]).length)) :
-                                                    listTab==='allowlist' ? fmt(stats.allowlistSize || ((lists.allowlist||[]).length)) : 
-                                                    listTab==='private_tlds' ? fmt((stats.privateTldsSize || 0) + ((lists.private_tlds||[]).length)) : 
-                                                    fmt((stats.mullvadDomainsSize || 0) + ((lists.mullvad_upstream||[]).length)) }} total (merged)
-                                                </span>
-                                            </div>
-                                            <div class="fh" style="margin-top:10px">
-                                                Static file + {{ (listTab==='blocklist' || listTab==='allowlist') ? 'external URLs + ' : '' }} custom 
-                                                {{ (listTab==='blocklist' || listTab==='allowlist') ? 'domains' : 'rules' }} 
-                                                above are merged at runtime.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div> <!-- close listsLoading else -->
                         </div>
 
@@ -2192,8 +2006,27 @@
     </div><!-- /#app -->
 
     <script>
-        const { createApp, ref, computed, onMounted, onUnmounted, watch } = Vue;
-        createApp({
+        const { createApp, ref, computed, onMounted, onUnmounted, watch, nextTick } = Vue;
+        const editorHeights = ref(JSON.parse(localStorage.getItem('dnsadm_editor_heights') || '{}'));
+        const app = createApp({
+            directives: {
+                resizer: {
+                    mounted(el, binding) {
+                        const key = binding.value;
+                        const defaultHeight = key.endsWith('_text') ? '300px' : '150px';
+                        el.style.height = editorHeights.value[key] || defaultHeight;
+                        el._ro = new ResizeObserver(() => {
+                            const h = el.style.height;
+                            if (h && h !== editorHeights.value[key]) {
+                                editorHeights.value[key] = h;
+                                localStorage.setItem('dnsadm_editor_heights', JSON.stringify(editorHeights.value));
+                            }
+                        });
+                        el._ro.observe(el);
+                    },
+                    unmounted(el) { if (el._ro) el._ro.disconnect(); }
+                }
+            },
             setup() {
                 const appState = ref('loading');
                 const hasChanges = ref(false);
@@ -2206,7 +2039,6 @@
                     theme.value = theme.value === 'light' ? 'dark' : 'light';
                 };
                 const tab = ref('dashboard');
-                const token = ref(localStorage.getItem('dnsadm_token') || '');
                 const adminUsername = ref('');
 
                 // Auth
@@ -2218,7 +2050,6 @@
                 const config = ref({});
                 const stats = ref({});
                 const syncState = ref('idle'); 
-                const syncMsg = ref('');
                 const lists = ref({});
                 const listTab = ref('blocklist');
                 const customUrls = ref({});
@@ -2227,9 +2058,6 @@
                 const syncing = ref(false);
                 const currentRawText = ref('');
                 const currentRawUrlText = ref('');
-                const newUrl = ref('');
-                const savingUrl = ref(false);
-                const savingList = ref(false);
                 
                 // Edge Status Polling
                 const latestCommitSha = ref('');
@@ -2337,6 +2165,14 @@
                     }, {});
                 });
                 const selectedDiffCount = computed(() => reviewDiff.value.filter(i => i.selected).length);
+                const staticSubscriptionRules = ref({ blocklist: 0, allowlist: 0 });
+                
+                // editorHeights is now defined outside setup() to be accessible by directives
+                const saveEditorHeight = (key, height) => {
+                    if (!height) return;
+                    editorHeights.value[key] = height;
+                    localStorage.setItem('dnsadm_editor_heights', JSON.stringify(editorHeights.value));
+                };
 
                 const notifications = ref([]);
                 const showNotifications = ref(false);
@@ -2427,8 +2263,6 @@
                 const allFeatures = computed(() => [...features, ...otherFeatures, ...filters]);
                 const activeFeatureCount = computed(() => features.filter(f => config.value[f.key]).length);
                 const activeFilterCount = computed(() => filters.filter(f => config.value[f.key]).length);
-                const activeCount = computed(() => allFeatures.value.filter(f => config.value[f.key]).length);
-                const totalCount = computed(() => allFeatures.value.length);
                 const GITHUB_OWNER = ref(localStorage.getItem('dnsadm_owner') || '');
                 const GITHUB_REPO = ref(localStorage.getItem('dnsadm_repo') || '');
                 let sessionPAT = '';
@@ -2654,6 +2488,11 @@
                         stats.value = await githubGet('database/stats.json') || { lastFetch: new Date().toISOString() };
                         
                         initialSnapshot.value = JSON.stringify({ c: config.value, cd: lists.value, u: customUrls.value });
+                        
+                        // Calculate static rules count (Total - Custom) once on load
+                        staticSubscriptionRules.value.blocklist = Math.max(0, (stats.value.blocklistSize || 0) - (lists.value.blocklist?.length || 0));
+                        staticSubscriptionRules.value.allowlist = Math.max(0, (stats.value.allowlistSize || 0) - (lists.value.allowlist?.length || 0));
+                        
                         setTimeout(() => { initDone = true; hasChanges.value = false; }, 500);
 
                         if (!skipEdgeCheck) await checkEdgeStatus(true);
@@ -2837,11 +2676,6 @@
                     showToast(`Updated URLs locally.${removed > 0 ? ' Removed ' + removed + ' junk/duplicate entries.' : ''} Remember to Sync to GitHub!`, 'success', true);
                 };
 
-                const listSuccessFlash = ref(false);
-                const triggerListSuccess = () => {
-                    listSuccessFlash.value = true;
-                    setTimeout(() => { listSuccessFlash.value = false; }, 1000);
-                };
 
                 const isIP = (str) => /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(str);
 
@@ -3000,124 +2834,7 @@
                     return false;
                 };
 
-                const pollStatsSync = async (oldTimestamp) => {
-                    const maxAttempts = 60; // Up to 120 seconds
-                    let attempts = 0;
-                    while (attempts < maxAttempts) {
-                        try {
-                            const res = await fetch(`/database/stats.json?v=${Date.now()}`, { cache: 'no-store' });
-                            if (res.ok) {
-                                const d = await res.json();
-                                if (d && d._updated && d._updated > oldTimestamp) {
-                                    return true;
-                                }
-                            }
-                        } catch (e) { }
-                        await new Promise(r => setTimeout(r, 2000));
-                        attempts++;
-                    }
-                    return false;
-                };
 
-                const getLatestWorkflowRun = async () => {
-                    try {
-                        const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER.value}/${GITHUB_REPO.value}/actions/runs?event=workflow_dispatch`, { headers: { 'Authorization': `Bearer ${sessionPAT}` } });
-                        if (res.ok) {
-                            const data = await res.json();
-                            if (data.workflow_runs && data.workflow_runs.length > 0) return data.workflow_runs[0].id;
-                        }
-                    } catch (e) { }
-                    return 0;
-                };
-
-                const waitForWorkflowCompletion = async (prevRunId) => {
-                    let currentRunId = 0;
-                    for (let i = 0; i < 20; i++) {
-                        await new Promise(r => setTimeout(r, 3000));
-                        try {
-                            const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER.value}/${GITHUB_REPO.value}/actions/runs?event=workflow_dispatch`, { headers: { 'Authorization': `Bearer ${sessionPAT}` } });
-                            if (res.ok) {
-                                const data = await res.json();
-                                if (data.workflow_runs && data.workflow_runs.length > 0 && data.workflow_runs[0].id > prevRunId) {
-                                    currentRunId = data.workflow_runs[0].id;
-                                    break;
-                                }
-                            }
-                        } catch(e) {}
-                    }
-                    if (!currentRunId) return false;
-                    for (let i = 0; i < 60; i++) {
-                        await new Promise(r => setTimeout(r, 3000));
-                        try {
-                            const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER.value}/${GITHUB_REPO.value}/actions/runs/${currentRunId}`, { headers: { 'Authorization': `Bearer ${sessionPAT}` } });
-                            if (res.ok) {
-                                const data = await res.json();
-                                if (data.status === 'completed') return data.conclusion === 'success';
-                            }
-                        } catch(e) {}
-                    }
-                    return false;
-                };
-
-                // ===== BATCH SAVE (MARKER-BASED PATCHING) =====
-                const patchContent = (fullText, startMarker, endMarker, newInside) => {
-                    const startIdx = fullText.indexOf(startMarker);
-                    const endIdx = fullText.indexOf(endMarker);
-                    if (startIdx === -1 || endIdx === -1) {
-                        throw new Error(`Markers not found: ${startMarker} or ${endMarker}`);
-                    }
-                    const prefix = fullText.substring(0, startIdx + startMarker.length);
-                    const suffix = fullText.substring(endIdx);
-                    return prefix + "\n" + newInside.trim() + "\n" + suffix;
-                };
-
-                const patchWorkerCode = (code, cfg) => {
-                    const startMarker = "// CONFIG_START";
-                    const endMarker = "// CONFIG_END";
-                    
-                    const startIdx = code.indexOf(startMarker);
-                    const endIdx = code.indexOf(endMarker);
-                    if (startIdx === -1 || endIdx === -1) return patchWorkerVariables(code, cfg); // Fallback
-
-                    const configSection = code.substring(startIdx + startMarker.length, endIdx);
-                    const patchedSection = patchWorkerVariables(configSection, cfg);
-                    
-                    return code.substring(0, startIdx + startMarker.length) + patchedSection + code.substring(endIdx);
-                };
-
-                const patchWorkerVariables = (section, cfg) => {
-                    let patched = section;
-                    for (const [key, val] of Object.entries(cfg)) {
-                        if (key === '_updated') continue;
-                        const regex = new RegExp(`(const\\s+${key}\\s+=\\s+)([^;]+)(;)`);
-                        let replacement = JSON.stringify(val);
-                        if (typeof val === 'string') replacement = `'${val}'`;
-                        patched = patched.replace(regex, `$1${replacement}$3`);
-                    }
-                    return patched;
-                };
-
-                const patchScriptCode = (code, urls) => {
-                    let patched = code;
-                    
-                    // Patch Blocklist
-                    if (urls.blocklist && urls.blocklist.length > 0) {
-                        const blockContent = "  curl -fsSL --max-time 60 \\\n  " + urls.blocklist.join(" \\\n  ");
-                        patched = patchContent(patched, "# EXTERNAL_BLOCKLIST_START", "# EXTERNAL_BLOCKLIST_END", blockContent);
-                    } else {
-                        patched = patchContent(patched, "# EXTERNAL_BLOCKLIST_START", "# EXTERNAL_BLOCKLIST_END", "  # No external blocklists");
-                    }
-
-                    // Patch Allowlist
-                    if (urls.allowlist && urls.allowlist.length > 0) {
-                        const allowContent = "  curl -fsSL --max-time 60 \\\n  " + urls.allowlist.join(" \\\n  ");
-                        patched = patchContent(patched, "# EXTERNAL_ALLOWLIST_START", "# EXTERNAL_ALLOWLIST_END", allowContent);
-                    } else {
-                        patched = patchContent(patched, "# EXTERNAL_ALLOWLIST_START", "# EXTERNAL_ALLOWLIST_END", "  # No external allowlists");
-                    }
-
-                    return patched;
-                };
 
                 const prepareSync = () => {
                     if (!initialSnapshot.value || !hasChanges.value) return;
@@ -3174,7 +2891,7 @@
                         showReviewModal.value = true;
                     } catch (e) {
                         console.error('Diff error:', e);
-                        saveAll(); // fallback to direct save on diff error
+                        showToast('Failed to generate change review. Please try again.', 'error');
                     }
                 };
 
@@ -3207,7 +2924,6 @@
                 const reconcileWithGitHub = async () => {
                     if (!sessionPAT || !GITHUB_OWNER.value || !GITHUB_REPO.value) return false;
                     try {
-                        syncMsg.value = 'Verifying GitHub state...';
                         const snapRes = await fetch(
                             `https://api.github.com/repos/${GITHUB_OWNER.value}/${GITHUB_REPO.value}/contents/database/all_configs_snapshot.json?t=${Date.now()}`,
                             { headers: { 'Authorization': `Bearer ${sessionPAT}` }, cache: 'no-store' }
@@ -3262,7 +2978,6 @@
                     let runId = 0;
 
                     // Wait up to 45s for the triggered run to appear in the API
-                    syncMsg.value = 'Waiting for workflow to start...';
                     for (let i = 0; i < 22 && !runId; i++) {
                         await new Promise(r => setTimeout(r, 2000));
                         try {
@@ -3278,7 +2993,6 @@
                                 );
                                 if (freshRun) {
                                     runId = freshRun.id;
-                                    syncMsg.value = `Workflow queued (run #${runId})...`;
                                 }
                             }
                         } catch(e) {}
@@ -3296,10 +3010,6 @@
                             );
                             if (res.ok) {
                                 const data = await res.json();
-                                const label = data.status === 'in_progress' ? 'Running...'
-                                            : data.status === 'queued'      ? 'Queued...'
-                                            : data.status;
-                                syncMsg.value = `Workflow: ${label}`;
                                 if (data.status === 'completed') return data.conclusion === 'success';
                             }
                         } catch(e) {}
@@ -3315,14 +3025,13 @@
                         const success = await pollAdminSyncWorkflow(triggerTime);
                         if (success) {
                             syncState.value = 'cloudflare';
-                            syncMsg.value = 'Workflow done. Waiting for Cloudflare edge deployment (~30s)...';
                             
                             const edgeSuccess = await pollCloudflareSync(triggerTime);
                             
                             if (edgeSuccess) {
                                 showToast('Sync Complete! Cloudflare Edge updated.', 'success');
                             } else {
-                                showToast('Workflow succeeded, but Edge propagation timed out. Check later.', 'warning', 10000);
+                                showToast('Workflow succeeded, but Edge propagation timed out. Check later.', 'warning');
                             }
                         } else {
                             throw new Error('Workflow ended with a failure — check GitHub Actions logs for details.');
@@ -3364,9 +3073,6 @@
 
                     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
                         syncState.value = 'github';
-                        syncMsg.value = attempt === 1
-                            ? 'Writing sync payload to GitHub...'
-                            : `Retrying... (Attempt ${attempt}/${MAX_RETRIES})`;
                         if (attempt === 1) showToast('Sending sync request...', 'info');
 
                         try {
@@ -3396,7 +3102,6 @@
                             }
 
                             // ── Step 2: Trigger admin_sync.yml ────────────────────────────────
-                            syncMsg.value = 'Triggering Admin Sync workflow...';
                             const triggerTime = Date.now();
                             const dispatchRes = await fetch(
                                 `https://api.github.com/repos/${GITHUB_OWNER.value}/${GITHUB_REPO.value}/actions/workflows/${ADMIN_SYNC_WORKFLOW}/dispatches`,
@@ -3413,7 +3118,7 @@
                                     msg += ' — Hint: PAT needs "workflow" scope.';
                                 throw new Error(`Failed to trigger workflow: ${msg}`);
                             }
-                            showToast('Sync workflow triggered! Monitoring progress...', 'info', 25000);
+                            showToast('Sync workflow triggered! Monitoring progress...', 'info');
 
                             // ── Step 3: Run the full polling lifecycle ─────────────────────
                             await runSyncLifecycle(triggerTime);
@@ -3423,7 +3128,6 @@
                             console.error(`Sync attempt ${attempt} failed:`, e);
                             if (attempt < MAX_RETRIES) {
                                 showToast(`Sync failed. Retrying (Attempt ${attempt + 1}/${MAX_RETRIES})...`, 'warning');
-                                syncMsg.value = `Waiting ${RETRY_DELAY_MS / 1000}s before retry (${attempt}/${MAX_RETRIES} failed)...`;
                                 await new Promise(r => setTimeout(r, RETRY_DELAY_MS));
                             } else {
                                 // Final failure: cleanup and reconcile
@@ -3475,7 +3179,7 @@
                             await new Promise(r => setTimeout(r, 1000));
                             if (navigator.onLine) return; // network came back quickly
                         }
-                        showToast('Network disconnected! Waiting for connection to return...', 'error', 15000);
+                        showToast('Network disconnected! Waiting for connection to return...', 'error');
                     };
 
                     window.addEventListener('online', onNetworkReconnect);
@@ -3546,23 +3250,25 @@
                 });
 
                 return {
-                    appState, tab, adminUsername, config, stats, hasChanges, syncState, syncMsg,
+                    appState, tab, adminUsername, config, stats, hasChanges, syncState,
                     loginUser, loginPass, regOwner, regRepo, regPAT, regUser, regPass, regPass2, authError,
-                    lists, listTab, customUrls, currentRawText, currentRawUrlText, newUrl,
-                    saving, savingUrl, savingList, syncing, listsLoading, notifications, showNotifications,
+                    lists, listTab, customUrls, currentRawText, currentRawUrlText,
+                    saving, syncing, listsLoading, notifications, showNotifications,
                     tabLabels, listTabLabels, textPlaceholders, urlPlaceholders,
                     features, filters, allFeatures,
-                    activeFeatureCount, activeFilterCount, activeCount, totalCount,
+                    activeFeatureCount, activeFilterCount,
                     upstreamForm, uvPrimary, uvFallback, uvGeo, uvTimeout, uvInterval, uvV4, uvV6, clearUv,
                     showReviewModal, showForceSyncModal, reviewDiff, groupedReviewDiff, selectedDiffCount, prepareSync, executeSync, executeForceSync,
                     register, login, logout, toggleFeature, toggleEcsInline, saveUpstreams, resetUpstreams,
-                    switchToLists, saveListText, saveUrlText, forceSync, saveAll, runSyncLifecycle,
+                    switchToLists, saveListText, saveUrlText, forceSync,
                     fmt, timeAgo, showToast, theme, toggleTheme, topbarStatus,
-                    activeToasts, listSuccessFlash,
+                    activeToasts, staticSubscriptionRules,
+                    editorHeights,
                     pingMs, pingStatus, pingLabel
                 };
             }
-        }).mount('#app');
+        });
+        app.mount('#app');
     </script>
 </body>
 
