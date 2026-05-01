@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DNS Resolver Tool</title>
+    <link rel="icon" type="image/x-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAIr0lEQVR4AZxWCVhTxxY+c28WRBKSQBSbsFQQlU0BaV1oi0tbsUq1D9BqtVZxwaKogIBrXBEBdxG3+lprq+KT566PZ6utWmvqho0rT8SE1QAJIZKQ5N53JzUpikZ0vpw75575zzn/zJw7EwLesI0fn9oxNTMnP3lu1ob09NWubxgG3ohA/ISMIYSTc+3uPacS9xaemfWoWvtoTnrOiDch8ToE0GfxKe8nzcm6JZcrio+fvOhM07TFYqEsxT/J+UVHfjkycaqsJCU9N1omk7U7rkNgXFwc+dGIpLenzVy+elLi0ieXr90+t6/wTE9No96sVpXur6+4x2uodOOqlbe+bWzUU8dOng/ef+jMifIq0M+Zl7tmytcy/6goGQscNDsBnCwqOkE6Im7mB1OTli/IXLJJwXHxb3lQpnpwsOhc+pGjvzrpdE8MatX9fQ0VZX0AHo4BUDUDFFoAKifWV5R1VStv7m3SG0xHT5x3+u6HU2k/nbt2t4u30TgnPe9KSvraxYmzV0aPHp3mG9WKlJ2A5O2I67fuPFJe+v322X8dPrtix67DAaeKfyfq6hvNdRXVN9WqW8u01Q+7AJR/DlB2A9q0snKAmi80lXcFaqViUV1l1T2NpolitofYs/dk2D/3Hl968NDPJ85evlEa+q7LPQAa4RB2AoAIrtlEAU0D6PUGrVr1v9N1qrtJDZX1YqD/DGFmuQTgoQY7OZbKJwBVK4BSdK9TaTqrlQ/mqlXlvxlbTM04ttlMgYWiuTLZ0mcJMMVkwoGb9M1aQ/0FATPLoQDKLQDX25EUe75IrqgBHqwDuN+/qfYX52aDUY9RphaLUaEIeJaA2UKZsMXQ2FSDQe0RZkbYpT1QK8ZgMDZhB5OpxRgYeAur9nMAUZSFKSYGZzaZmecrf41F8wzaHXHtwtqCUczaY51ZbbufrQaYT5qZDx4FZGVmVR086AcXuai6xObvAPnCIXsOewCCIFhM/QGwSIffLQ6nyQoWglYFyGwA9QKpBNvaI4hpGIdIgsQ9FgI/sDg7dxDiHnE4HXHvUNz8spF1wRCw+R6pDrGtBplJkviVJKwEKKzbCZCAjNjA7MVftYBfngqTC2m/+5LSrHuf+cQACIHnJFooBUrkBUjSO+EpDDTbRxk0O2MpjLfZWvfk09XlsNn2VbYTMD2uTY4IkKx/ywXGtnbCev2Wj+Og9BwiGso7aLJDY+lHchJ5RdCkRzBNPb7/94pV3uSiR38g7faYNOz3vDB5OdjmxGXj3bbmJpQ7JySUbY6dPc73XnDmBybdzgRp3//MHTzt6vzIScr5wdG1q96ZzOK67AMXMYDYHxDJLYTGKrBUKtJogjiFNCqEgzYs7T4QUUxxOwuAsJizG/KHfaWShQ0qSX33qwNxAZyo3lECNovFEEDgzX4s7OduWnJjU9I/CL6lcYdb7eV1/k/k2WHGi4sGsK/n9HUpLfBjKXcJSN0JJ0PNTqS8gigEi2lntwKkrcT5QFBv2mBSXpoGTFJdpp+Y9Ao/SAu9gELEJKhSAFmt+IZP1Z3xca75Jnri5yU9pE69CQKR2Lln9SFBv5o9C32cqg4StCRoFwobd5roM/4C0S/hKuo75QoKjTuNgmIOQ/cPfwSfAdspZ/FoYZp8OZ9nSQK3rgC8zhSSnTW7pciVwEzKzHdZQFUqRKRnuEaYfnW3mSt4z9yxSwbl6plhdu+ebaiWR1SrdZ0Q01gsAqo9Bh9rEITIaK4wjxAMX5HAG5k1lBezIvL4fc5vm381VRTKm+fz4jeN5H2xYyx/0g/TBBnyA5g5ii+0mAk03EKyR+J3qwi9aUSwkonmBqDqy/OwTbTwxnlR+qVsQcr5bNGs0xniyUd0/750JwyYnffv5gUKnWitd8qxpYIJO1OthYCdmDF0s8F5Yt6eCzFT1l/cj20vEtGsn4+L5p4/ahsjOvc0kLoaoDrwoVlbypz7tpHne2EMPuP6hPbUUBzeFduonQBTSbQr32UlIhAIRCJf4AT3sIEc9ZRJv41ZAiA8Q80eaSXWy6Yt3k8qknh3R0y2Oo1245o16TobhjHZVICy+w93D+gbTDNbhaBFn/X3yMu1looLixnyQLcYD74cpV3LFCDR750g+oneuKc17hkC+fmy6uDArvk4oEjiEwPQ1b81+EW6OP2ujpaEZ/EnH2hzfmC8n180NzQiUhTaqxstfct9e+H3q0ux3SbPEMDGumbdok+i+1tIgiCAzbPvNTho/OmH5iOES6wtqLT0pPGavGiIoIOanb9hwfTnEW0IbF2d2eDh0Smuk1gIYg/m5AHp5uedXuddncy7rV0otewIUTQrM8L8nvdtQwADVi9LKooeOmArh8MCsWePrwGEmdj+OqKcCBkamb+RyxP2IBBBkC16Nl8ivlcrC3BpHeeFBDAgd9XsGWNHDy0mSQLcPcNXAQg3MnZcHkzn+Kf8EsYJpF5ZpNnAsSJpAOxI1N5BTtCiUy8PGwRP20sJ4PGcVckfjx8XXczlsjGJmQDdSgB8HH6ef07p2NvV0+t77I8FIZwamD+7tJUEspjAqf+EYtuN6ZAAAKJzVs75KG7UoNwuHm7MdngHuUl8FQCdtgFI3OBp83DxE7Odev4R6R8yo9TszaWd+PhOAAsQjCBGJ61iYQ4CSiAFViffmwwvGru/ggCGAKzPSUsb0L/XiGFD+5tJkiTcPUOmCjz8mFtJ/COAa6GBL61wFUvCK0jvzd8qupRWcAM+RCGjUlHvT5OJoOGJRGD0dCJw2Awy5LO5LP9BidzbzeF/RQaGok17RV+wYf4xsYQniR31QUFIkB+w2WyO2LPXGHfPiFjmfwY7ONAXPv3kvSNFl8/UB6Qd+C8/bl2ea+yGjbzRmwt4Y/K38cZs2eoSm7eu44jlBSg+3mJL164VsIFzZWm1zLec6NfNxzsysteywQP7mIcMjKAGRUVs6Sx2jVifOw9fUtaltfm8qv8/AAAA//+XM2QVAAAABklEQVQDAJGYUfq+VnPwAAAAAElFTkSuQmCC">
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --bg-2: #f1f3f5;
+            --card: #ffffff;
+            --card-hover: #f8f9fa;
+            --border: #d0d7de;
+            --border-hover: #afb8c1;
+            --accent: #0969da;
+            --primary: #0969da;
+            --accent-glow: rgba(9, 105, 218, 0.1);
+            --accent-dim: rgba(9, 105, 218, 0.05);
+            --success: #1a7f37;
+            --success-bg: #dafbe1;
+            --success-border: rgba(31, 35, 40, 0.15);
+            --danger: #cf222e;
+            --danger-bg: #ffebe9;
+            --danger-border: rgba(31, 35, 40, 0.15);
+            --warning: #9a6700;
+            --warning-bg: #fff8c5;
+            --warning-border: rgba(31, 35, 40, 0.15);
+            --text: #1f2328;
+            --text-2: #656d76;
+            --text-3: #8c959f;
+            --radius: 6px;
+            --radius-sm: 4px;
+            --shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0d1117;
+                --bg-2: #161b22;
+                --card: #0d1117;
+                --card-hover: #161b22;
+                --border: #30363d;
+                --border-hover: #8b949e;
+                --accent: #2f81f7;
+                --primary: #2f81f7;
+                --accent-glow: rgba(47, 129, 247, 0.15);
+                --accent-dim: rgba(47, 129, 247, 0.1);
+                --success: #3fb950;
+                --success-bg: rgba(46, 160, 67, 0.15);
+                --danger: #f85149;
+                --danger-bg: rgba(248, 81, 73, 0.15);
+                --warning: #d29922;
+                --warning-bg: rgba(187, 128, 9, 0.15);
+                --text: #e6edf3;
+                --text-2: #8b949e;
+                --text-3: #7d8590;
+                --shadow: 0 1px 0 rgba(1, 4, 9, 0.04);
+            }
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font);
+            font-size: 14px;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; }
+
+        /* ─── NAV ─── */
+        nav {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+        }
+        nav .container { display: flex; align-items: center; justify-content: space-between; }
+        .logo {
+            font-family: var(--font-display);
+            font-size: 17px; font-weight: 700;
+            color: var(--text); text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+            letter-spacing: -0.2px;
+        }
+        .logo-icon {
+            width: 32px; height: 32px;
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent);
+        }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 34px; height: 34px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-2); text-decoration: none;
+            transition: all .2s;
+        }
+        .nav-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+        .gh-link {
+            display: flex; align-items: center; justify-content: center;
+            width: 34px; height: 34px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-2); text-decoration: none;
+            transition: border-color .2s, color .2s, background .2s;
+        }
+        .gh-link:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+
+        /* ─── HEADER ─── */
+        header { text-align: center; margin: 80px 0 48px; }
+        h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+        header p { color: var(--text-2); font-size: 18px; line-height: 1.6; }
+
+        /* ─── SEARCH FORM ─── */
+        /* ─── PRIMER BOX ─── */
+        .box {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        .box-body {
+            padding: 16px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 16px;
+            align-items: end;
+        }
+
+        .field-group { display: flex; flex-direction: column; gap: 8px; }
+        
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper input {
+            padding-right: 44px;
+        }
+
+        .btn-toggle-advanced {
+            position: absolute;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            color: var(--text-3);
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .btn-toggle-advanced:hover {
+            color: var(--text);
+            background: var(--border);
+        }
+
+        .advanced-panel {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 0;
+        }
+        .advanced-panel.show {
+            max-height: 120px;
+            opacity: 1;
+            margin-top: 16px;
+        }
+
+        label {
+            font-size: 14px; font-weight: 600; color: var(--text);
+        }
+
+        input {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            color: var(--text);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 7px 12px;
+            width: 100%;
+            height: 36px;
+            outline: none;
+            box-shadow: inset 0 1px 0 rgba(31,35,40,0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            input { box-shadow: none; }
+        }
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        input::placeholder { color: var(--text-3); }
+
+        .btn-resolve {
+            font-family: var(--font);
+            font-size: 14px;
+            font-weight: 600;
+            background: #1f883d;
+            color: #fff;
+            border: 1px solid rgba(31, 35, 40, 0.15);
+            border-radius: var(--radius);
+            padding: 0 16px;
+            height: 36px;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+            white-space: nowrap;
+            transition: background .2s;
+        }
+        .btn-resolve:hover { background: #1a7f37; }
+        @media (prefers-color-scheme: dark) {
+            .btn-resolve { background: #238636; border-color: rgba(240, 246, 252, 0.1); }
+            .btn-resolve:hover { background: #2ea043; }
+        }
+        .btn-resolve:disabled { background: var(--bg-2); color: var(--text-3); cursor: not-allowed; border-color: var(--border); }
+
+        .shortcut-hint {
+            font-size: 13px; color: var(--text-2); margin-top: 8px; text-align: center;
+        }
+        .shortcut-hint kbd {
+            background-color: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text);
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            line-height: 1.2;
+            padding: 2px 5px;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 640px) {
+            .form-row { grid-template-columns: 1fr; }
+            .field-group.ecs { min-width: unset; }
+            .btn-resolve { width: 100%; justify-content: center; }
+        }
+
+        /* ─── STATUS CARD ─── */
+        /* ─── STATUS CARD ─── */
+        .status-card {
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+        }
+        .status-pill {
+            padding: 4px 8px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600;
+            display: inline-flex; align-items: center; justify-content: center;
+            line-height: 1.2;
+            border: 1px solid transparent;
+        }
+        .status-success { 
+            background: rgba(45, 164, 78, 0.15); 
+            color: #1a7f37; 
+            border-color: rgba(45, 164, 78, 0.4); 
+        }
+        .status-error { 
+            background: rgba(207, 34, 46, 0.1); 
+            color: #cf222e; 
+            border-color: rgba(207, 34, 46, 0.2); 
+        }
+        @media (prefers-color-scheme: dark) {
+            .status-success { 
+                background: rgba(35, 134, 54, 0.15); 
+                color: #3fb950; 
+                border-color: rgba(35, 134, 54, 0.4); 
+            }
+            .status-error { 
+                background: rgba(248, 81, 73, 0.1); 
+                color: #f85149; 
+                border-color: rgba(248, 81, 73, 0.2); 
+            }
+        }
+        .status-text { font-size: 14px; font-weight: 400; color: var(--text-2); flex: 1; }
+        .status-text.error { 
+            color: var(--danger); 
+            font-family: var(--font-mono); 
+            font-weight: 600;
+        }
+        .flags-row { display: flex; gap: 4px; flex-wrap: wrap; margin-left: auto; }
+
+        .badge {
+            padding: 2px 8px; border-radius: var(--radius-sm);
+            font-size: 12px; font-family: var(--font-mono); font-weight: 500;
+            border: 1px solid var(--border);
+        }
+        .badge-on  { background: rgba(45, 164, 78, 0.15); color: #1a7f37; border-color: rgba(45, 164, 78, 0.4); }
+        .badge-off { background: var(--bg-2); color: var(--text-3); }
+        @media (prefers-color-scheme: dark) {
+            .badge-on { background: rgba(35, 134, 54, 0.15); color: #3fb950; border-color: rgba(35, 134, 54, 0.4); }
+        }
+
+        /* ─── TABS ─── */
+        .tabs-nav-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+            margin-top: 8px;
+        }
+        .tabs-nav-label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: var(--bg);
+            padding: 0 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 12px;
+            justify-content: flex-start;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+        }
+        @media (prefers-color-scheme: dark) {
+            .tabs-nav {
+                background: #0d1117;
+            }
+        }
+
+        .tab-btn {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 20px;
+            padding: 3px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            background: var(--bg-2);
+            color: var(--text);
+            cursor: pointer;
+            transition: none;
+            white-space: nowrap;
+        }
+        .tab-btn:hover { 
+            background: var(--border);
+        }
+        .tab-btn.active {
+            background: #2da44e;
+            color: #ffffff;
+            border-color: #2da44e;
+        }
+        
+        /* Record Type Colors (Results Table) */
+        .cell-type-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            color: #ffffff;
+            background: var(--text-3);
+        }
+        .type-A { background: #0969da; }
+        .type-AAAA { background: #8250df; }
+        .type-CNAME { background: #d4a72c; }
+        .type-MX { background: #bf3989; }
+        .type-TXT { background: #9a6700; }
+        .type-NS { background: #1a7f37; }
+        
+        @media (prefers-color-scheme: dark) {
+            .tab-btn.active {
+                background: #238636;
+                border-color: #238636;
+            }
+            .type-A { background: #2f81f7; }
+            .type-AAAA { background: #a371f7; }
+            .type-CNAME { background: #d29922; }
+            .type-MX { background: #db61a2; }
+            .type-TXT { background: #d29922; }
+            .type-NS { background: #3fb950; }
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn .25s ease; }
+
+        /* ─── RESULT SECTIONS ─── */
+        /* ─── RESULT SECTIONS (GitHub Box Style) ─── */
+        .result-section {
+            position: relative;
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 32px;
+            margin-top: 12px;
+        }
+        @media (prefers-color-scheme: dark) {
+            .result-section { background: #0d1117; }
+        }
+        .section-label {
+            position: absolute;
+            top: -9px;
+            left: 12px;
+            background: var(--bg);
+            padding: 0 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .section-title { display: none; } /* Deprecated in favor of section-label */
+
+        .table-wrapper { 
+            overflow: visible; 
+            padding-top: 4px;
+        }
+        @media (max-width: 640px) {
+            .table-wrapper { overflow-x: auto; } /* Only scroll on mobile */
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        table.data-table th {
+            padding: 8px 16px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+        }
+        @media (prefers-color-scheme: dark) {
+            table.data-table th { background: #0d1117; }
+        }
+        table.data-table td {
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text);
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        table.data-table tr:last-child td { border-bottom: none; }
+        table.data-table tbody td:hover { background: var(--card-hover); }
+
+        .cell-name { font-weight: 400; color: var(--accent); font-family: var(--font-mono); font-size: 15px; word-break: break-all; }
+        .cell-ttl  { font-family: var(--font-mono); font-size: 14px; color: var(--text-2); white-space: nowrap; padding-left: 8px !important; padding-right: 8px !important; }
+        .cell-type { font-family: var(--font-mono); font-size: 14px; font-weight: 400; color: var(--text-2); white-space: nowrap; padding-left: 8px !important; padding-right: 8px !important; }
+        .cell-data { font-family: var(--font-mono); font-size: 15px; word-break: break-all; }
+
+        /* ─── COPY ANIMATION & TOAST ─── */
+        @keyframes copyFlash {
+            0% { background: rgba(29,110,234,0.15); }
+            100% { background: transparent; }
+        }
+        .copy-flash { animation: copyFlash .6s ease-out !important; }
+
+        .copy-toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: #1e293b; color: #fff; padding: 10px 20px; border-radius: 8px;
+            font-size: 14px; font-weight: 500; opacity: 0; transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ─── TAB LOADING ─── */
+        .tab-loader { display: flex; justify-content: center; padding: 40px 0; }
+        .tab-loader .spinner { width: 22px; height: 22px; border: 3px solid rgba(29,110,234,0.15); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+        /* ─── ERROR BOX ─── */
+        .error-box {
+            background: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            color: var(--danger);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center; gap: 10px;
+            animation: errorShow .4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        @keyframes errorShow {
+            0% { opacity: 0; transform: translateY(-10px); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .error-box svg { flex-shrink: 0; }
+
+        /* ─── LOADING ─── */
+        .loader { display: none; justify-content: center; margin: 40px 0; }
+        .spinner {
+            width: 26px; height: 26px;
+            border: 3px solid rgba(29,110,234,0.15);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        /* ─── COPY TOOLTIP (Inline) ─── */
+        .copy-tooltip {
+            position: fixed;
+            background: #1f2328;
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 10000;
+            pointer-events: none;
+            animation: tooltipFadeUp 1s forwards;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        @keyframes tooltipFadeUp {
+            0% { opacity: 0; transform: translate(-50%, 0); }
+            15% { opacity: 1; transform: translate(-50%, -12px); }
+            80% { opacity: 1; transform: translate(-50%, -12px); }
+            100% { opacity: 0; transform: translate(-50%, -20px); }
+        }
+        @media (prefers-color-scheme: dark) {
+            .copy-tooltip { background: #30363d; border: 1px solid #444c56; }
+        }
+
+        /* ─── JSON VIEW ─── */
+        .json-container {
+            position: relative;
+            background: #ffffff !important;
+            border-radius: 0 0 6px 6px;
+            border-top: none;
+        }
+        .copy-btn-json {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text-2);
+            cursor: pointer;
+            transition: none;
+        }
+        }
+        .copy-btn-json:hover {
+            background: var(--border);
+            color: var(--text);
+        }
+        @media (prefers-color-scheme: dark) {
+            .json-container { background: #0d1117 !important; }
+        }
+        .json-container:hover { background: var(--bg-2) !important; }
+        @media (prefers-color-scheme: dark) {
+            .json-container:hover { background: #161b22 !important; }
+        }
+
+        /* ─── GEO INFO ADAPTIVE ─── */
+        .geo-ip-container { display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; }
+        .geo-ip-container.is-ipv6 { flex-direction: column; align-items: flex-start; gap: 2px; padding: 4px 0; }
+        
+        .ip-text { font-weight: 400; color: var(--text); flex-shrink: 0; }
+        .geo-info-lines {
+            display: flex; flex-direction: column; gap: 0;
+            text-align: right; line-height: 1.3;
+        }
+        .is-ipv6 .geo-info-lines { text-align: left; margin-left: 0; }
+        .geo-line {
+            font-size: 10.5px; font-weight: 400; color: var(--text-3);
+            font-family: var(--font); white-space: nowrap;
+        }
+        .geo-loading-inline { font-style: italic; opacity: 0.5; font-size: 10.5px; }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            h1 { font-size: 24px; }
+            .search-card { padding: 18px; }
+            .geo-tooltip { display: none; } /* Hide on mobile to avoid layout issues */
+        }
+    </style>
+</head>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <span class="host-name"></span>
+            </a>
+            <div class="nav-right">
+                <a href="/resolver.html" class="nav-btn" title="Resolver Tool" aria-label="Resolver Tool">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </a>
+                <a href="https://github.com/bibicadotnet/serverless-edge-dns-gateway-v2" class="gh-link" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-bottom: 80px;">
+        <header>
+            <h1>DNS <span class="gradient-text">Resolver</span> Tool</h1>
+            <p>Query any domain via <span class="host-name"></span> infrastructure</p>
+        </header>
+
+        <form class="box box-body" id="dns-form">
+            <div class="form-row">
+                <div class="field-group">
+                    <label for="domain-input">DNS Name</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="domain-input" placeholder="e.g. google.com or cloudflare.com." autocomplete="off">
+                        <button type="button" id="btn-toggle-advanced" class="btn-toggle-advanced" title="Advanced Options">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="field-group">
+                    <label style="visibility:hidden">Action</label>
+                    <button type="submit" id="btn-submit" class="btn-resolve">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        Resolve
+                    </button>
+                </div>
+            </div>
+            <div id="advanced-panel" class="advanced-panel">
+                <div class="form-row">
+                    <div class="field-group ecs">
+                        <label for="ecs-input">Client Subnet <span style="font-weight:400;text-transform:none;opacity:0.6">(optional)</span></label>
+                        <input type="text" id="ecs-input" placeholder="e.g. 103.186.65.82" autocomplete="off">
+                    </div>
+                    <!-- Phantom group to maintain alignment with the Resolve button above -->
+                    <div class="field-group" style="visibility:hidden; pointer-events:none;" aria-hidden="true">
+                        <label>&nbsp;</label>
+                        <button type="button" class="btn-resolve" tabindex="-1">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                            Resolve
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="shortcut-hint">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px; opacity: 0.7;"><rect x="2" y="4" width="20" height="16" rx="2" ry="2"/><line x1="6" y1="8" x2="6.01" y2="8"/><line x1="10" y1="8" x2="10.01" y2="8"/><line x1="14" y1="8" x2="14.01" y2="8"/><line x1="18" y1="8" x2="18.01" y2="8"/><line x1="6" y1="12" x2="6.01" y2="12"/><line x1="10" y1="12" x2="10.01" y2="12"/><line x1="14" y1="12" x2="14.01" y2="12"/><line x1="18" y1="12" x2="18.01" y2="12"/><line x1="7" y1="16" x2="17" y2="16"/></svg>
+                <kbd>Ctrl</kbd>+<kbd>Enter</kbd> → .com &nbsp;·&nbsp; <kbd>Shift</kbd>+<kbd>Enter</kbd> → .net
+            </div>
+        </form>
+
+        <div class="error-box" id="error-box">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="error-msg">Invalid domain name provided.</span>
+        </div>
+
+        <div class="loader" id="loader">
+            <div class="spinner"></div>
+        </div>
+
+        <div class="result-container" id="result-container" style="display: none;">
+            <div class="status-card" id="status-card">
+                <div id="status-pill" class="status-pill"></div>
+                <div id="status-desc" class="status-text"></div>
+                <div id="flags-container" class="flags-row"></div>
+            </div>
+
+            <div class="tabs-nav-wrapper" id="tabs-nav-wrapper" style="display: none;">
+                <span class="tabs-nav-label">RR Type</span>
+                <div class="tabs-nav" id="tabs-nav"></div>
+            </div>
+            <div id="tables-container"></div>
+        </div>
+    </div>
+
+    <div class="copy-toast" id="copy-toast">Copied to clipboard</div>
+
+    <script>
+        const form = document.getElementById('dns-form');
+        const input = document.getElementById('domain-input');
+        const ecsInput = document.getElementById('ecs-input');
+        const btn = document.getElementById('btn-submit');
+        const btnToggle = document.getElementById('btn-toggle-advanced');
+        const advancedPanel = document.getElementById('advanced-panel');
+        const loader = document.getElementById('loader');
+        const container = document.getElementById('result-container');
+        const errorBox = document.getElementById('error-box');
+        const errorMsg = document.getElementById('error-msg');
+        const toast = document.getElementById('copy-toast');
+
+        // State for lazy loading
+        window._dnsCache = {};
+        window._currentDomain = '';
+        window._currentECS = '';
+
+        btnToggle.addEventListener('click', () => {
+            const isShowing = advancedPanel.classList.toggle('show');
+            btnToggle.classList.toggle('active', isShowing);
+        });
+
+        const COMMON_TYPES = [
+            'A', 'AAAA', 'CNAME', 'MX', 'TXT', 'NS', 'SOA', 'SRV', 'HTTPS', 'SVCB', 
+            'CAA', 'DS', 'DNSKEY', 'PTR', 'SPF', 'NAPTR', 'SSHFP', 'TLSA', 'DNAME', 
+            'RRSIG', 'NSEC', 'NSEC3', 'NSEC3PARAM', 'CDNSKEY', 'CDS', 'CERT', 
+            'HINFO', 'IPSECKEY', 'KEY', 'RP', 'SIG', 'WKS'
+        ];
+
+
+        function showCopyToast(msg) {
+            // Deprecated in favor of showInstantTooltip, but kept for non-element messages
+            toast.textContent = msg || 'Copied to clipboard';
+            toast.classList.add('show');
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        function showInstantTooltip(el, msg = 'Copied!') {
+            const rect = el.getBoundingClientRect();
+            const tooltip = document.createElement('div');
+            tooltip.className = 'copy-tooltip';
+            tooltip.textContent = msg;
+            document.body.appendChild(tooltip);
+            
+            tooltip.style.left = `${rect.left + rect.width / 2}px`;
+            tooltip.style.top = `${rect.top}px`;
+            
+            setTimeout(() => tooltip.remove(), 1000);
+        }
+
+        window.copyJSONData = (btn) => {
+            const content = document.getElementById('tab-JSON')._jsonRaw;
+            if (!content) return;
+            navigator.clipboard.writeText(content).then(() => {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor" style="color: #1a7f37;"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path></svg>`;
+                showInstantTooltip(btn, 'Copied JSON!');
+                setTimeout(() => btn.innerHTML = originalHTML, 2000);
+            });
+        };
+
+        function setupCellCopy(element) {
+            element.querySelectorAll('table.data-table tbody td').forEach(cell => {
+                cell.addEventListener('click', (e) => {
+                    const content = cell.dataset.copyValue || cell.textContent.trim();
+                    if (!content) return;
+
+                    navigator.clipboard.writeText(content).then(() => {
+                        cell.classList.remove('copy-flash');
+                        void cell.offsetWidth;
+                        cell.classList.add('copy-flash');
+                        const preview = content.length > 15 ? content.substring(0, 15) + '...' : content;
+                        showInstantTooltip(cell, `Copied: ${preview}`);
+                        setTimeout(() => cell.classList.remove('copy-flash'), 600);
+                    });
+                });
+            });
+        }
+
+        async function fetchIpGeo(ip) {
+            const cacheKey = `geo_cache_${ip}`;
+            const cached = sessionStorage.getItem(cacheKey);
+            if (cached) return JSON.parse(cached);
+
+            try {
+                // Try ipinfo.io first as it has better city data for Anycast
+                const res = await fetch(`https://ipinfo.io/${ip}/json`, { signal: AbortSignal.timeout(2000) }).then(r => r.json());
+                const data = {
+                    city: res.city || null,
+                    isp: res.org || null,
+                    asn: '', // ipinfo 'org' usually already contains ASN
+                    country: res.country || null
+                };
+                sessionStorage.setItem(cacheKey, JSON.stringify(data));
+                return data;
+            } catch (e) {
+                try {
+                    // Fallback to ip.sb
+                    const res = await fetch(`https://api.ip.sb/geoip/${ip}`, { signal: AbortSignal.timeout(2000) }).then(r => r.json());
+                    const data = {
+                        city: res.city || null,
+                        isp: res.asn_organization || null,
+                        asn: res.asn ? `AS${res.asn}` : '',
+                        country: res.country || res.country_code || null
+                    };
+                    sessionStorage.setItem(cacheKey, JSON.stringify(data));
+                    return data;
+                } catch (e2) { return null; }
+            }
+        }
+
+        function initGeoTooltips(element) {
+            const ipCells = element.querySelectorAll('.cell-data.ip-addr');
+            ipCells.forEach(async cell => {
+                const ip = cell.dataset.ip;
+                if (!ip) return;
+
+                const loadData = async () => {
+                    const linesEl = cell.querySelector('.geo-info-lines');
+                    if (!linesEl || linesEl.dataset.loaded === 'true') return;
+
+                    const data = await fetchIpGeo(ip);
+                    if (data) {
+                        let html = '';
+                        // 1. Location line: City, Country
+                        let locParts = [];
+                        if (data.city && !data.city.toLowerCase().includes('unknown')) locParts.push(data.city);
+                        if (data.country && !data.country.toLowerCase().includes('unknown')) locParts.push(data.country);
+                        
+                        if (locParts.length > 0) {
+                            html += `<div class="geo-line">${locParts.join(', ')}</div>`;
+                        }
+                        
+                        // 2. ISP / Org line
+                        if (data.isp && !data.isp.toLowerCase().includes('unknown')) {
+                            const ispName = (data.asn ? data.asn + ' ' : '') + data.isp;
+                            html += `<div class="geo-line">${ispName}</div>`;
+                        }
+                        
+                        linesEl.innerHTML = html;
+                        linesEl.dataset.loaded = 'true';
+                    } else {
+                        linesEl.innerHTML = '';
+                    }
+                };
+
+                loadData();
+            });
+        }
+
+        async function fetchDNS(domain, type, ecs) {
+            const typeInt = NAME_TO_TYPE[type] || type;
+            let fetchUrl = `/dns-query?name=${encodeURIComponent(domain)}&type=${typeInt}`;
+            if (ecs) fetchUrl += `&edns_client_subnet=${encodeURIComponent(ecs)}`;
+            
+            // Tight 5 second timeout for DNS queries
+            const response = await fetch(fetchUrl, { signal: AbortSignal.timeout(5000) });
+            if (!response.ok) throw new Error('API request failed');
+            return await response.json();
+        }
+
+        // (label positioning not needed - using static labels)
+
+
+        // DNS Class Mapping
+        const CLASS_MAP = {
+            1: 'IN (Internet)',
+            3: 'CH (Chaos)',
+            4: 'HS (Hesiod)',
+            254: 'NONE',
+            255: 'ANY (*)'
+        };
+
+        // DNS OpCode Mapping
+        const OPCODE_MAP = {
+            0: 'Query',
+            1: 'IQuery',
+            2: 'Status',
+            4: 'Notify',
+            5: 'Update',
+            6: 'DSO'
+        };
+
+        // DNS Type Mapping (Comprehensive RFC-based mapping)
+        const TYPE_MAP = {
+            1: 'A', 2: 'NS', 3: 'MD', 4: 'MF', 5: 'CNAME', 6: 'SOA', 7: 'MB', 8: 'MG', 9: 'MR', 10: 'NULL',
+            11: 'WKS', 12: 'PTR', 13: 'HINFO', 14: 'MINFO', 15: 'MX', 16: 'TXT', 17: 'RP', 18: 'AFSDB', 19: 'X25', 20: 'ISDN',
+            21: 'RT', 22: 'NSAP', 23: 'NSAP-PTR', 24: 'SIG', 25: 'KEY', 26: 'PX', 27: 'GPOS', 28: 'AAAA', 29: 'LOC', 30: 'NXT',
+            31: 'EID', 32: 'NIMLOC', 33: 'SRV', 34: 'ATMA', 35: 'NAPTR', 36: 'KX', 37: 'CERT', 38: 'A6', 39: 'DNAME', 40: 'SINK',
+            41: 'OPT', 42: 'APL', 43: 'DS', 44: 'SSHFP', 45: 'IPSECKEY', 46: 'RRSIG', 47: 'NSEC', 48: 'DNSKEY', 49: 'DHCID', 50: 'NSEC3',
+            51: 'NSEC3PARAM', 52: 'TLSA', 53: 'SMIMEA', 55: 'HIP', 56: 'NINFO', 57: 'RKEY', 58: 'TALINK', 59: 'CDS', 60: 'CDNSKEY',
+            61: 'OPENPGPKEY', 62: 'CSYNC', 63: 'ZONEMD', 64: 'SVCB', 65: 'HTTPS', 66: 'DSYNC', 67: 'HHIT', 68: 'BRID', 99: 'SPF', 100: 'UINFO',
+            101: 'UID', 102: 'GID', 103: 'UNSPEC', 104: 'NID', 105: 'L32', 106: 'L64', 107: 'LP', 108: 'EUI48', 109: 'EUI64', 128: 'NXNAME',
+            249: 'TKEY', 250: 'TSIG', 251: 'IXFR', 252: 'AXFR', 253: 'MAILB', 254: 'MAILA', 255: '*', 256: 'URI', 257: 'CAA', 258: 'AVC',
+            259: 'DOA', 260: 'AMTRELAY', 261: 'RESINFO', 262: 'WALLET', 263: 'CLA', 264: 'IPN', 32768: 'TA', 32769: 'DLV'
+        };
+
+        const NAME_TO_TYPE = Object.fromEntries(Object.entries(TYPE_MAP).map(([k, v]) => [v, parseInt(k)]));
+
+        // DNS Status (RCODE) Mapping
+        const RCODE_MAP = {
+            0: { name: 'NOERROR', desc: 'DNS Query completed successfully' },
+            1: { name: 'FORMERR', desc: 'DNS Query Format Error' },
+            2: { name: 'SERVFAIL', desc: 'Server failed to complete the DNS request' },
+            3: { name: 'NXDOMAIN', desc: 'Domain name does not exist' },
+            4: { name: 'NOTIMP', desc: 'Function not implemented' },
+            5: { name: 'REFUSED', desc: 'The server refused to answer for the query' },
+            6: { name: 'YXDOMAIN', desc: 'Name that can not exist, does exist' },
+            7: { name: 'YXRRSET', desc: 'RRset that can not exist, does exist' },
+            8: { name: 'NXRRSET', desc: 'RR Set that should exist does not' },
+            9: { name: 'NOTAUTH', desc: 'Server not authoritative for the zone' },
+            10: { name: 'NOTZONE', desc: 'Name not in zone' },
+            11: { name: 'DSOTYPENI', desc: 'DSO-TYPE Not Implemented' },
+            12: { name: 'Unassigned', desc: 'Unassigned' },
+            13: { name: 'Unassigned', desc: 'Unassigned' },
+            14: { name: 'Unassigned', desc: 'Unassigned' },
+            15: { name: 'Unassigned', desc: 'Unassigned' },
+            16: { name: 'BADVERS', desc: 'Bad OPT Version / TSIG Signature Failure' },
+            17: { name: 'BADKEY', desc: 'Key not recognized' },
+            18: { name: 'BADTIME', desc: 'Signature out of time window' },
+            19: { name: 'BADMODE', desc: 'Bad TKEY Mode' },
+            20: { name: 'BADNAME', desc: 'Duplicate key name' },
+            21: { name: 'BADALG', desc: 'Algorithm not supported' },
+            22: { name: 'BADTRUNC', desc: 'Bad Truncation' },
+            23: { name: 'BADCOOKIE', desc: 'Bad/missing Server Cookie' }
+        };
+
+        // IANA Root Zone TLD List (Hardcoded Fallback)
+        let IANA_TLDS = new Set("AAA AARP ABB ABBOTT ABBVIE ABC ABLE ABOGADO ABUDHABI AC ACADEMY ACCENTURE ACCOUNTANT ACCOUNTANTS ACO ACTOR AD ADS ADULT AE AEG AERO AETNA AF AFL AFRICA AG AGAKHAN AGENCY AI AIG AIRBUS AIRFORCE AIRTEL AKDN AL ALIBABA ALIPAY ALLFINANZ ALLSTATE ALLY ALSACE ALSTOM AM AMAZON AMERICANEXPRESS AMERICANFAMILY AMEX AMFAM AMICA AMSTERDAM ANALYTICS ANDROID ANQUAN ANZ AO AOL APARTMENTS APP APPLE AQ AQUARELLE AR ARAB ARAMCO ARCHI ARMY ARPA ART ARTE AS ASDA ASIA ASSOCIATES AT ATHLETA ATTORNEY AU AUCTION AUDI AUDIBLE AUDIO AUSPOST AUTHOR AUTO AUTOS AW AWS AX AXA AZ AZURE BA BABY BAIDU BANAMEX BAND BANK BAR BARCELONA BARCLAYCARD BARCLAYS BAREFOOT BARGAINS BASEBALL BASKETBALL BAUHAUS BAYERN BB BBC BBT BBVA BCG BCN BD BE BEATS BEAUTY BEER BERLIN BEST BESTBUY BET BF BG BH BHARTI BI BIBLE BID BIKE BING BINGO BIO BIZ BJ BLACK BLACKFRIDAY BLOCKBUSTER BLOG BLOOMBERG BLUE BM BMS BMW BN BNPPARIBAS BO BOATS BOEHRINGER BOFA BOM BOND BOO BOOK BOOKING BOSCH BOSTIK BOSTON BOT BOUTIQUE BOX BR BRADESCO BRIDGESTONE BROADWAY BROKER BROTHER BRUSSELS BS BT BUILD BUILDERS BUSINESS BUY BUZZ BV BW BY BZ BZH CA CAB CAFE CAL CALL CALVINKLEIN CAM CAMERA CAMP CANON CAPETOWN CAPITAL CAPITALONE CAR CARAVAN CARDS CARE CAREER CAREERS CARS CASA CASE CASH CASINO CAT CATERING CATHOLIC CBA CBN CBRE CC CD CENTER CEO CERN CF CFA CFD CG CH CHANEL CHANNEL CHARITY CHASE CHAT CHEAP CHINTAI CHRISTMAS CHROME CHURCH CI CIPRIANI CIRCLE CISCO CITADEL CITI CITIC CITY CK CL CLAIMS CLEANING CLICK CLINIC CLINIQUE CLOTHING CLOUD CLUB CLUBMED CM CN CO COACH CODES COFFEE COLLEGE COLOGNE COM COMMBANK COMMUNITY COMPANY COMPARE COMPUTER COMSEC CONDOS CONSTRUCTION CONSULTING CONTACT CONTRACTORS COOKING COOL COOP CORSICA COUNTRY COUPON COUPONS COURSES CPA CR CREDIT CREDITCARD CREDITUNION CRICKET CROWN CRS CRUISE CRUISES CU CUISINELLA CV CW CX CY CYMRU CYOU CZ DAD DANCE DATA DATE DATING DATSUN DAY DCLK DDS DE DEAL DEALER DEALS DEGREE DELIVERY DELL DELOITTE DELTA DEMOCRAT DENTAL DENTIST DESI DESIGN DEV DHL DIAMONDS DIET DIGITAL DIRECT DIRECTORY DISCOUNT DISCOVER DISH DIY DJ DK DM DNP DO DOCS DOCTOR DOG DOMAINS DOT DOWNLOAD DRIVE DTV DUBAI DUPONT DURBAN DVAG DVR DZ EARTH EAT EC ECO EDEKA EDU EDUCATION EE EG EMAIL EMERCK ENERGY ENGINEER ENGINEERING ENTERPRISES EPSON EQUIPMENT ER ERICSSON ERNI ES ESQ ESTATE ET EU EUROVISION EUS EVENTS EXCHANGE EXPERT EXPOSED EXPRESS EXTRASPACE FAGE FAIL FAIRWINDS FAITH FAMILY FAN FANS FARM FARMERS FASHION FAST FEDEX FEEDBACK FERRARI FERRERO FI FIDELITY FIDO FILM FINAL FINANCE FINANCIAL FIRE FIRESTONE FIRMDALE FISH FISHING FIT FITNESS FJ FK FLICKR FLIGHTS FLIR FLORIST FLOWERS FLY FM FO FOO FOOD FOOTBALL FORD FOREX FORSALE FORUM FOUNDATION FOX FR FREE FRESENIUS FRL FROGANS FRONTIER FTR FUJITSU FUN FUND FURNITURE FUTBOL FYI GA GAL GALLERY GALLO GALLUP GAME GAMES GAP GARDEN GAY GB GBIZ GD GDN GE GEA GENT GENTING GEORGE GF GG GGEE GH GI GIFT GIFTS GIVES GIVING GL GLASS GLE GLOBAL GLOBO GM GMAIL GMBH GMO GMX GN GODADDY GOLD GOLDPOINT GOLF GOODYEAR GOOG GOOGLE GOP GOT GOV GP GQ GR GRAINGER GRAPHICS GRATIS GREEN GRIPE GROCERY GROUP GS GT GU GUCCI GUGE GUIDE GUITARS GURU GW GY HAIR HAMBURG HANGOUT HAUS HBO HDFC HDFCBANK HEALTH HEALTHCARE HELP HELSINKI HERE HERMES HIPHOP HISAMITSU HITACHI HIV HK HKT HM HN HOCKEY HOLDINGS HOLIDAY HOMEDEPOT HOMEGOODS HOMES HOMESENSE HONDA HORSE HOSPITAL HOST HOSTING HOT HOTELS HOTMAIL HOUSE HOW HR HSBC HT HU HUGHES HYATT HYUNDAI IBM ICBC ICE ICU ID IE IEEE IFM IKANO IL IM IMAMAT IMDB IMMO IMMOBILIEN IN INC INDUSTRIES INFINITI INFO ING INK INSTITUTE INSURANCE INSURE INT INTERNATIONAL INTUIT INVESTMENTS IO IPIRANGA IQ IR IRISH IS ISMAILI IST ISTANBUL IT ITAU ITV JAGUAR JAVA JCB JE JEEP JETZT JEWELRY JIO JLL JM JMP JNJ JO JOBS JOBURG JOT JOY JP JPMORGAN JPRS JUEGOS JUNIPER KAUFEN KDDI KE KERRYHOTELS KERRYPROPERTIES KFH KG KH KI KIA KIDS KIM KINDLE KITCHEN KIWI KM KN KOELN KOMATSU KOSHER KP KPMG KPN KR KRD KRED KUOKGROUP KW KY KYOTO KZ LA LACAIXA LAMBORGHINI LAMER LAND LANDROVER LANXESS LASALLE LAT LATINO LATROBE LAW LAWYER LB LC LDS LEASE LECLERC LEFRAK LEGAL LEGO LEXUS LGBT LI LIDL LIFE LIFEINSURANCE LIFESTYLE LIGHTING LIKE LILLY LIMITED LIMO LINCOLN LINK LIVE LIVING LK LLC LLP LOAN LOANS LOCKER LOCUS LOL LONDON LOTTE LOTTO LOVE LPL LPLFINANCIAL LR LS LT LTD LTDA LU LUNDBECK LUXE LUXURY LV LY MA MADRID MAIF MAISON MAKEUP MAN MANAGEMENT MANGO MAP MARKET MARKETING MARKETS MARRIOTT MARSHALLS MATTEL MBA MC MCKINSEY MD ME MED MEDIA MEET MELBOURNE MEME MEMORIAL MEN MENU MERCK MERCKMSD MG MH MIAMI MICROSOFT MIL MINI MINT MIT MITSUBISHI MK ML MLB MLS MM MMA MN MO MOBI MOBILE MODA MOE MOI MOM MONASH MONEY MONSTER MORMON MORTGAGE MOSCOW MOTO MOTORCYCLES MOV MOVIE MP MQ MR MS MSD MT MTN MTR MU MUSEUM MUSIC MV MW MX MY MZ NA NAB NAGOYA NAME NAVY NBA NC NE NEC NET NETBANK NETFLIX NETWORK NEUSTAR NEW NEWS NEXT NEXTDIRECT NEXUS NF NFL NG NGO NHK NI NICO NIKE NIKON NINJA NISSAN NISSAY NL NO NOKIA NORTON NOW NOWRUZ NOWTV NP NR NRA NRW NTT NU NYC NZ OBI OBSERVER OFFICE OKINAWA OLAYAN OLAYANGROUP OLLO OM OMEGA ONE ONG ONL ONLINE OOO OPEN ORACLE ORANGE ORG ORGANIC ORIGINS OSAKA OTSUKA OTT OVH PA PAGE PANASONIC PARIS PARS PARTNERS PARTS PARTY PAY PCCW PE PET PF PFIZER PG PH PHARMACY PHD PHILIPS PHONE PHOTO PHOTOGRAPHY PHOTOS PHYSIO PICS PICTET PICTURES PID PIN PING PINK PIONEER PIZZA PK PL PLACE PLAY PLAYSTATION PLUMBING PLUS PM PN PNC POHL POKER POLITIE PORN POST PR PRAXI PRESS PRIME PRO PROD PRODUCTIONS PROF PROGRESSIVE PROMO PROPERTIES PROPERTY PROTECTION PRU PRUDENTIAL PS PT PUB PW PWC PY QA QPON QUEBEC QUEST RACING RADIO RE READ REALESTATE REALTOR REALTY RECIPES RED REDUMBRELLA REHAB REISE REISEN REIT RELIANCE REN RENT RENTALS REPAIR REPORT REPUBLICAN REST RESTAURANT REVIEW REVIEWS REXROTH RICH RICHARDLI RICOH RIL RIO RIP RO ROCKS RODEO ROGERS ROOM RS RSVP RU RUGBY RUHR RUN RW RWE RYUKYU SA SAARLAND SAFE SAFETY SAKURA SALE SALON SAMSCLUB SAMSUNG SANDVIK SANDVIKCOROMANT SANOFI SAP SARL SAS SAVE SAXO SB SBI SBS SC SCB SCHAEFFLER SCHMIDT SCHOLARSHIPS SCHOOL SCHULE SCHWARZ SCIENCE SCOT SD SE SEARCH SEAT SECURE SECURITY SEEK SELECT SENER SERVICES SEVEN SEW SEX SEXY SFR SG SH SHANGRILA SHARP SHELL SHIA SHIKSHA SHOES SHOP SHOPPING SHOUJI SHOW SI SILK SINA SINGLES SITE SJ SK SKI SKIN SKY SKYPE SL SLING SM SMART SMILE SN SNCF SO SOCCER SOCIAL SOFTBANK SOFTWARE SOHU SOLAR SOLUTIONS SONG SONY SOY SPA SPACE SPORT SPOT SR SRL SS ST STADA STAPLES STAR STATEBANK STATEFARM STC STCGROUP STOCKHOLM STORAGE STORE STREAM STUDIO STUDY STYLE SU SUCKS SUPPLIES SUPPLY SUPPORT SURF SURGERY SUZUKI SV SWATCH SWISS SX SY SYDNEY SYSTEMS SZ TAB TAIPEI TALK TAOBAO TARGET TATAMOTORS TATAR TATTOO TAX TAXI TC TCI TD TDK TEAM TECH TECHNOLOGY TEL TEMASEK TENNIS TEVA TF TG TH THD THEATER THEATRE TIAA TICKETS TIENDA TIPS TIRES TIROL TJ TJMAXX TJX TK TKMAXX TL TM TMALL TN TO TODAY TOKYO TOOLS TOP TORAY TOSHIBA TOTAL TOURS TOWN TOYOTA TOYS TR TRADE TRADING TRAINING TRAVEL TRAVELERS TRAVELERSINSURANCE TRUST TRV TT TUBE TUI TUNES TUSHU TV TVS TW TZ UA UBANK UBS UG UK UNICOM UNIVERSITY UNO UOL UPS US UY UZ VA VACATIONS VANA VANGUARD VC VE VEGAS VENTURES VERISIGN VERSICHERUNG VET VG VI VIAJES VIDEO VIG VIKING VILLAS VIN VIP VIRGIN VISA VISION VIVA VIVO VLAANDEREN VN VODKA VOLVO VOTE VOTING VOTO VOYAGE VU WALES WALMART WALTER WANG WANGGOU WATCH WATCHES WEATHER CHANNEL WEBCAM WEBER WEBSITE WED WEDDING WEIBO WEIR WF WHOSWHO WIEN WIKI WILLIAMHILL WIN WINDOWS WINE WINNERS WME WOODSIDE WORK WORKS WORLD WOW WS WTC WTF XBOX XEROX XIHUAN XIN XN--11B4C3D XN--1CK2E1B XN--1QQW23A XN--2SCRJ9C XN--30RR7Y XN--3BST00M XN--3DS443G XN--3E0B707E XN--3HCRJ9C XN--3PXU8K XN--42C2D9A XN--45BR5CYL XN--45BRJ9C XN--45Q11C XN--4DBRK0CE XN--4GBRIM XN--54B7FTA0CC XN--55QW42G XN--55QX5D XN--5SU34J936BGSG XN--5TZM5G XN--6FRZ82G XN--6QQ986B3XL XN--80ADXHKS XN--80AO21A XN--80AQECDR1A XN--80ASEHDB XN--80ASWG XN--8Y0A063A XN--90A3AC XN--90AE XN--90AIS XN--9DBQ2A XN--9ET52U XN--9KRT00A XN--B4W605FERD XN--BCK1B9A5DRE4C XN--C1AVG XN--C2BR7G XN--CCK2B3B XN--CCKWCXETD XN--CG4BKI XN--CLCHC0EA0B2G2A9GCD XN--CZR694B XN--CZRS0T XN--CZRU2D XN--D1ACJ3B XN--D1ALF XN--E1A4C XN--ECKVDTC9D XN--EFVY88H XN--FCT429K XN--FHBEI XN--FIQ228C5HS XN--FIQ64B XN--FIQS8S XN--FIQZ9S XN--FJQ720A XN--FLW351E XN--FPCRJ9C3D XN--FZC2C9E2C XN--FZYS8D69UVGM XN--G2XX48C XN--GCKR3F0F XN--GECRJ9C XN--GK3AT1E XN--H2BREG3EVE XN--H2BRJ9C XN--H2BRJ9C8C XN--HXT814E XN--I1B6B1A6A2E XN--IMR513N XN--IO0A7I XN--J1AEF XN--J1AMH XN--J6W193G XN--JLQ480N2RG XN--JVR189M XN--KCRX77D1X4A XN--KPRW13D XN--KPRY57D XN--KPUT3I XN--L1ACC XN--LGBBAT1AD8J XN--MGB9AWBF XN--MGBA3A3EJT XN--MGBA3A4F16A XN--MGBA7C0BBN0A XN--MGBAAM7A8H XN--MGBAB2BD XN--MGBAH1A3HJKRD XN--MGBAI9AZGQP6J XN--MGBAYH7GPA XN--MGBBH1A XN--MGBBH1A71E XN--MGBC0A9AZCG XN--MGBCA7DZDO XN--MGBCPQ6GPA1A XN--MGBERP4A5D4AR XN--MGBGU82A XN--MGBI4ECEXP XN--MGBPL2FH XN--MGBT3DHD XN--MGBTX2B XN--MGBX4CD0AB XN--MIX891F XN--MK1BU44C XN--MXTQ1M XN--NGBC5AZD XN--NGBE9E0A XN--NGBRX XN--NODE XN--NQV7F XN--NQV7FS00EMA XN--NYQY26A XN--O3CW4H XN--OGBPF8FL XN--OTU796D XN--P1ACF XN--P1AI XN--PGBS0DH XN--PSSY2U XN--Q7CE6A XN--Q9JYB4C XN--QCKA1PMC XN--QXA6A XN--QXAM XN--RHQV96G XN--ROVU88B XN--RVC1E0AM3E XN--S9BRJ9C XN--SES554G XN--T60B56A XN--TCKWE XN--TIQ49XQYJ XN--UNUP4Y XN--VERMGENSBERATER-CTB XN--VERMGENSBERATUNG-PWB XN--VHQUV XN--VUQ861B XN--W4R85EL8FHU5DNRA XN--W4RS40L XN--WGBH1C XN--WGBL6A XN--XHQ521B XN--XKC2AL3HYE2A XN--XKC2DL3A5EE0H XN--Y9A3AQ XN--YFRO4I67O XN--YGBI2AMMX XN--ZFR164B XXX XYZ YACHTS YAHOO YAMAXUN YANDEX YE YODOBASHI YOGA YOKOHAMA YOU YOUTUBE YT YUN ZA ZAPPOS ZARA ZERO ZIP ZM ZONE ZUERICH ZW".split(' '));
+
+        async function updateTLDs() {
+            try {
+                // Try to load from localStorage first
+                const cached = localStorage.getItem('iana_tlds');
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Date.now() - parsed.ts < 86400000) { // 24h cache
+                        IANA_TLDS = new Set(parsed.data);
+                    }
+                }
+
+                // Fetch latest from IANA
+                const response = await fetch('https://data.iana.org/TLD/tlds-alpha-by-domain.txt');
+                if (response.ok) {
+                    const text = await response.text();
+                    const lines = text.split('\n').filter(line => line && !line.startsWith('#'));
+                    IANA_TLDS = new Set(lines.map(l => l.trim().toUpperCase()));
+                    localStorage.setItem('iana_tlds', JSON.stringify({
+                        ts: Date.now(),
+                        data: Array.from(IANA_TLDS)
+                    }));
+                }
+            } catch (e) {
+                console.log('IANA TLD update failed (CORS or Network), using fallback.');
+            }
+        }
+        updateTLDs();
+
+        // IP / CIDR Validation
+        function isValidIP(ip) {
+            const v4 = /^(\d{1,3}\.){3}\d{1,3}$/;
+            const v6 = /^([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])$/;
+            return v4.test(ip) || v6.test(ip);
+        }
+
+        function ipToReverseDomain(ip) {
+            if (ip.includes(':')) {
+                // IPv6
+                let expanded = ip;
+                if (ip.includes('::')) {
+                    const [head, tail] = ip.split('::');
+                    const headParts = head ? head.split(':') : [];
+                    const tailParts = tail ? tail.split(':') : [];
+                    const missing = 8 - (headParts.length + tailParts.length);
+                    expanded = headParts.concat(Array(missing).fill('0')).concat(tailParts).join(':');
+                } else {
+                    const parts = ip.split(':');
+                    if (parts.length < 8) {
+                        expanded = parts.concat(Array(8 - parts.length).fill('0')).join(':');
+                    }
+                }
+                const parts = expanded.split(':').map(p => p.padStart(4, '0'));
+                return parts.join('').split('').reverse().join('.') + '.ip6.arpa';
+            } else {
+                // IPv4
+                return ip.split('.').reverse().join('.') + '.in-addr.arpa';
+            }
+        }
+
+        function isValidECS(ecs) {
+            if (!ecs) return true;
+            const parts = ecs.split('/');
+            if (parts.length > 2) return false;
+            if (!isValidIP(parts[0])) return false;
+            if (parts.length === 2) {
+                const prefix = parseInt(parts[1]);
+                if (isNaN(prefix)) return false;
+                const isV6 = parts[0].includes(':');
+                if (isV6) return prefix >= 0 && prefix <= 128;
+                return prefix >= 0 && prefix <= 32;
+            }
+            return true;
+        }
+
+        // Strict DNS Domain Regex
+        const domainRegex = /^(?=.{1,255}$)(?!\.)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.?$/i;
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, m => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[m]));
+        }
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+            errorBox.style.display = 'flex';
+            
+            // Re-trigger animation
+            errorBox.style.animation = 'none';
+            errorBox.offsetHeight; // trigger reflow
+            errorBox.style.animation = null;
+
+            loader.style.display = 'none';
+            container.style.display = 'none';
+            btn.disabled = false;
+        }
+
+        input.addEventListener('input', () => {
+            errorBox.style.display = 'none';
+        });
+
+        // Keyboard Shortcuts: Ctrl+Enter (.com) / Shift+Enter (.net)
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                let val = input.value.trim();
+                if (!val) return;
+                
+                if (e.ctrlKey) {
+                    e.preventDefault();
+                    if (!val.endsWith('.com')) {
+                        if (val.endsWith('.')) val = val.slice(0, -1);
+                        input.value = val + '.com';
+                    }
+                    form.requestSubmit();
+                } else if (e.shiftKey) {
+                    e.preventDefault();
+                    if (!val.endsWith('.net')) {
+                        if (val.endsWith('.')) val = val.slice(0, -1);
+                        input.value = val + '.net';
+                    }
+                    form.requestSubmit();
+                }
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            let domain = input.value.trim();
+            let ecs = ecsInput.value.trim();
+
+            if (!domain) {
+                showError('Please enter a domain name to resolve.');
+                return;
+            }
+
+            // Sanitization
+            try {
+                if (domain.includes('://')) {
+                    domain = new URL(domain).hostname;
+                } else {
+                    domain = domain.split('/')[0].split('?')[0];
+                }
+            } catch (err) {
+                domain = domain.split('/')[0];
+            }
+            
+            domain = domain.toLowerCase();
+
+            // Auto-convert IP to reverse DNS domain and switch to PTR/NAPTR
+            const checkIP = domain.endsWith('.') ? domain.slice(0, -1) : domain;
+            if (isValidIP(checkIP)) {
+                domain = ipToReverseDomain(checkIP);
+                input.value = domain;
+                
+                const activeBtn = document.querySelector('.tab-btn.active');
+                const currentType = window._initialType || (activeBtn ? activeBtn.dataset.type : 'A');
+                if (currentType !== 'PTR' && currentType !== 'NAPTR') {
+                    window._initialType = 'PTR';
+                }
+            }
+            
+            // Auto-convert IDN (Unicode) to Punycode conversion
+            if (/[^\x00-\x7F]/.test(domain)) {
+                try {
+                    const converted = new URL('http://' + domain).hostname;
+                    if (/[^\x00-\x7F]/.test(converted)) throw new Error();
+                    domain = converted;
+                } catch (e) {
+                    showError('Invalid Unicode domain name');
+                    return;
+                }
+            }
+
+            input.value = domain;
+
+            // Validation (Detailed breakdown of the strict Regex)
+            if (domain.length > 255) {
+                showError('Domain name too long (max 255 characters)');
+                return;
+            }
+
+            if (domain.startsWith('.')) {
+                showError('Domain cannot start with a dot');
+                return;
+            }
+
+            const labels = domain.split('.');
+            if (labels.length < 2) {
+                showError('Domain must contain at least one dot (e.g., example.com)');
+                return;
+            }
+
+            for (let i = 0; i < labels.length; i++) {
+                const label = labels[i];
+                if (label.length === 0) {
+                    // Allow empty label only at the very end (trailing dot)
+                    if (i === labels.length - 1 && i > 0) continue;
+                    showError('Invalid structure: contains empty label (..)');
+                    return;
+                }
+                if (label.length > 63) {
+                    showError('Label too long: "' + label.substring(0, 10) + '..." (max 63 chars)');
+                    return;
+                }
+                if (label.startsWith('-') || label.endsWith('-')) {
+                    showError('Labels cannot start or end with a hyphen: "' + label + '"');
+                    return;
+                }
+                if (!/^[a-z0-9-]+$/i.test(label)) {
+                    showError('Label contains invalid characters: "' + label + '"');
+                    return;
+                }
+                // Check if last non-empty label (TLD) is at least 2 characters and exists in IANA list
+                const isLast = (i === labels.length - 1) || (i === labels.length - 2 && labels[labels.length - 1] === '');
+                if (isLast) {
+                    if (label.length < 2) {
+                        showError('Invalid TLD: Top-level domain must be at least 2 characters');
+                        return;
+                    }
+                    if (!IANA_TLDS.has(label.toUpperCase())) {
+                        showError(`Invalid TLD: ".${label.toLowerCase()}" is not a recognized top-level domain`);
+                        return;
+                    }
+                }
+            }
+
+            // Final check with the strict regex as source of truth
+            if (!domainRegex.test(domain)) {
+                showError('Invalid domain format (RFC compliant check failed)');
+                return;
+            }
+
+            // ECS Validation
+            if (ecs && !isValidECS(ecs)) {
+                showError('Invalid EDNS Client Subnet. Must be an IP or CIDR.');
+                return;
+            }
+
+            // Update URL
+            const url = new URL(window.location);
+            url.searchParams.set('name', domain);
+            if (ecs) url.searchParams.set('edns_client_subnet', ecs);
+            else url.searchParams.delete('edns_client_subnet');
+            window.history.pushState({}, '', url);
+
+            // Clear cache and set current domain/ecs
+            window._dnsCache = {};
+            window._currentDomain = domain;
+            window._currentECS = ecs;
+
+            // UI Reset
+            errorBox.style.display = 'none';
+            loader.style.display = 'flex';
+            container.style.display = 'none';
+            btn.disabled = true;
+
+            try {
+                // Determine current active type or default to 'A' (prioritize window._initialType on first load)
+                const activeBtn = document.querySelector('.tab-btn.active');
+                let activeType = window._initialType || (activeBtn ? activeBtn.dataset.type : 'A');
+                delete window._initialType; // Clear it after use
+
+                // If active type is JSON, we fetch 'A' first to get the basic status/flags
+                const dnsType = activeType === 'JSON' ? 'A' : activeType;
+                const data = await fetchDNS(domain, dnsType, ecs);
+                window._dnsCache[dnsType] = data;
+
+                renderResults(data, activeType);
+                input.focus();
+            } catch (err) {
+                showError('Failed to fetch DNS data. Please check your connection or try again.');
+                console.error(err);
+            } finally {
+                loader.style.display = 'none';
+                btn.disabled = false;
+            }
+        });
+
+        // Initialize from URL
+        window.addEventListener('load', () => {
+            const params = new URLSearchParams(window.location.search);
+            const name = params.get('name') || params.get('domain');
+            const ecs = params.get('edns_client_subnet');
+            const type = params.get('type') || 'A';
+
+            if (name) input.value = name;
+            if (ecs) {
+                ecsInput.value = ecs;
+                advancedPanel.classList.add('show');
+                btnToggle.classList.add('active');
+            }
+
+            if (name) {
+                window._initialType = type;
+                form.requestSubmit();
+            }
+        });
+
+        function renderResults(dnsData, activeType = 'A') {
+            // Status and Flags from the primary record fetched
+            const pill = document.getElementById('status-pill');
+            const statusInfo = RCODE_MAP[dnsData.Status] || { name: 'UNKNOWN', desc: 'Unknown error code' };
+            pill.textContent = statusInfo.name;
+            pill.className = `status-pill ${dnsData.Status === 0 ? 'status-success' : 'status-error'}`;
+            
+            const descEl = document.getElementById('status-desc');
+            if (dnsData.Status === 0) {
+                descEl.style.display = 'none';
+            } else {
+                descEl.textContent = statusInfo.desc;
+                descEl.style.display = 'block';
+                descEl.classList.toggle('error', true);
+            }
+
+            const flagsRow = document.getElementById('flags-container');
+            const flags = [
+                { key: 'AA', label: 'AA', desc: 'Authoritative Answer' },
+                { key: 'TC', label: 'TC', desc: 'Truncated' },
+                { key: 'RD', label: 'RD', desc: 'Recursion Desired' },
+                { key: 'RA', label: 'RA', desc: 'Recursion Available' },
+                { key: 'AD', label: 'AD', desc: 'Authentic Data' },
+                { key: 'CD', label: 'CD', desc: 'Checking Disabled' }
+            ];
+            flagsRow.innerHTML = flags.map(f => `
+                <div class="badge ${dnsData[f.key] ? 'badge-on' : 'badge-off'}" title="${f.desc}">
+                    ${f.label}
+                </div>
+            `).join('');
+
+            // Render Tabs
+            const tabsNav = document.getElementById('tabs-nav');
+            const tabsNavWrapper = document.getElementById('tabs-nav-wrapper');
+            const tablesContainer = document.getElementById('tables-container');
+            tabsNav.innerHTML = '';
+            tablesContainer.innerHTML = '';
+            tabsNavWrapper.style.display = 'block';
+
+            // Create tabs for common types
+            COMMON_TYPES.forEach(type => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn ${type === activeType ? 'active' : ''}`;
+                btn.textContent = type;
+                btn.dataset.type = type;
+                btn.onclick = () => activateTab(type);
+                tabsNav.appendChild(btn);
+
+                const tabContent = document.createElement('div');
+                tabContent.className = `tab-content ${type === activeType ? 'active' : ''}`;
+                tabContent.id = `tab-${type}`;
+                
+                if (type === activeType) {
+                    tabContent.innerHTML = buildTableHTML(dnsData);
+                    setupCellCopy(tabContent);
+                    initGeoTooltips(tabContent);
+                }
+                tablesContainer.appendChild(tabContent);
+            });
+
+            // JSON Tab
+            const jsonBtn = document.createElement('button');
+            jsonBtn.className = `tab-btn ${activeType === 'JSON' ? 'active' : ''}`;
+            jsonBtn.textContent = 'JSON';
+            jsonBtn.dataset.type = 'JSON';
+            jsonBtn.onclick = () => activateTab('JSON');
+            tabsNav.appendChild(jsonBtn);
+
+            const jsonContent = document.createElement('div');
+            jsonContent.className = `tab-content ${activeType === 'JSON' ? 'active' : ''}`;
+            jsonContent.id = 'tab-JSON';
+            tablesContainer.appendChild(jsonContent);
+
+            if (activeType === 'JSON') {
+                activateTab('JSON'); // Use activateTab to trigger the full JSON loading logic
+            }
+
+            container.style.display = 'block';
+        }
+
+        async function activateTab(type) {
+            // UI Switch
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.toggle('active', b.textContent === type);
+            });
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.toggle('active', c.id === `tab-${type}`);
+            });
+
+            // Update Browser URL (Safe sync)
+            const url = new URL(window.location);
+            if (type !== 'A') {
+                url.searchParams.set('type', type);
+            } else {
+                url.searchParams.delete('type');
+            }
+            window.history.replaceState({}, '', url);
+
+            const contentEl = document.getElementById(`tab-${type}`);
+            if (!contentEl) return;
+
+            // If already loaded or JSON (needs all)
+            if (type === 'JSON') {
+                if (contentEl.innerHTML) return;
+                contentEl.innerHTML = '<div class="tab-loader"><div class="spinner"></div></div>';
+                
+                try {
+                    // Fetch all missing common types for JSON view
+                    const promises = COMMON_TYPES.map(async t => {
+                        if (window._dnsCache[t]) return { type: t, data: window._dnsCache[t] };
+                        const data = await fetchDNS(window._currentDomain, t, window._currentECS);
+                        window._dnsCache[t] = data;
+                        return { type: t, data };
+                    });
+                    const allResults = await Promise.all(promises);
+                    const jsonString = JSON.stringify(allResults, null, 2);
+                    const copyIcon = `<svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16" fill="currentColor"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path><path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path></svg>`;
+                    contentEl.innerHTML = `
+                        <div class="result-section">
+                            <span class="section-label">Raw JSON Data</span>
+                            <div style="position: absolute; top: 12px; right: 12px;">
+                                <button class="copy-btn-json" id="json-copy-btn" onclick="copyJSONData(this)" title="Copy JSON">${copyIcon}</button>
+                            </div>
+                            <div class="json-container" style="padding: 16px; margin-top: 8px; cursor: pointer; transition: background 0.2s;" onclick="copyJSONData(document.getElementById('json-copy-btn'))">
+                                <pre id="json-pre" style="margin: 0; font-size: 13px; color: var(--text); white-space: pre-wrap; word-break: break-all;">${escapeHTML(jsonString)}</pre>
+                            </div>
+                        </div>
+                    `;
+                    contentEl._jsonRaw = jsonString;
+                } catch (e) {
+                    contentEl.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--danger)">Failed to load JSON data.</div>';
+                }
+                return;
+            }
+
+            if (contentEl.innerHTML) return; // Already loaded
+
+            // Lazy load single type
+            contentEl.innerHTML = '<div class="tab-loader"><div class="spinner"></div></div>';
+            try {
+                const data = await fetchDNS(window._currentDomain, type, window._currentECS);
+                window._dnsCache[type] = data;
+                contentEl.innerHTML = buildTableHTML(data);
+                setupCellCopy(contentEl);
+                initGeoTooltips(contentEl);
+            } catch (e) {
+                contentEl.innerHTML = `<div style="padding: 20px; text-align: center; color: var(--danger)">Failed to load ${type} records.</div>`;
+            }
+        }
+
+        function buildTableHTML(data) {
+            let html = '';
+            
+            const renderSection = (title, items) => {
+                if (!items || items.length === 0) return '';
+                const isQ = title === 'Question';
+                return `
+                <div class="result-section">
+                    <span class="section-label">${title}</span>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <colgroup>
+                                <col style="width: 35%">
+                                <col style="width: 90px">
+                                ${!isQ ? '<col style="width: 60px">' : ''}
+                                ${!isQ ? '<col>' : ''}
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="cell-type">Type</th>
+                                    ${!isQ ? '<th class="cell-ttl">TTL</th>' : ''}
+                                    ${!isQ ? '<th>Data</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${items.map(item => {
+                                    const isIP = !isQ && (item.type === 1 || item.type === 28) && isValidIP(item.data);
+                                    return `
+                                <tr>
+                                    <td class="cell-name">${escapeHTML(item.name)}</td>
+                                    <td class="cell-type">
+                                        <span class="cell-type-badge type-${TYPE_MAP[item.type] || item.type}">
+                                            ${TYPE_MAP[item.type] || item.type}
+                                        </span>
+                                    </td>
+                                    ${!isQ ? `<td class="cell-ttl">${item.TTL}</td>` : ''}
+                                    ${!isQ ? `
+                                        <td class="cell-data ip-addr" data-ip="${isIP ? item.data : ''}" data-copy-value="${escapeHTML(item.data)}">
+                                            ${isIP ? `
+                                                <div class="geo-ip-container ${item.data.includes(':') ? 'is-ipv6' : ''}">
+                                                    <div class="ip-text">${escapeHTML(item.data)}</div>
+                                                    <div class="geo-info-lines"><span class="geo-loading-inline">...</span></div>
+                                                </div>
+                                            ` : escapeHTML(item.data)}
+                                        </td>
+                                    ` : ''}
+                                </tr>`;}).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+            };
+
+            html += renderSection('Question', data.Question);
+            html += renderSection('Answer', data.Answer);
+            html += renderSection('Authority', data.Authority);
+            html += renderSection('Additional', data.Additional);
+
+            if (html === '' && data.Status === 0) {
+                html = `<div class="result-section"><div style="text-align: center; padding: 48px; color: var(--text-3); font-size: 14px;">No records found</div></div>`;
+            }
+
+            return html;
+        }
+
+        // ── Dynamic Host ──
+        const host = location.host;
+        document.querySelectorAll('.host-name').forEach(el => el.textContent = host);
+        document.title = `${host} — DNS Resolver Tool`;
+    </script>
+</body>
+</html>
